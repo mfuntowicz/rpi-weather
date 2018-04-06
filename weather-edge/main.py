@@ -1,5 +1,7 @@
 from argparse import ArgumentParser
 from logging import basicConfig, getLogger, DEBUG, INFO
+
+from utils.system import get_host_specs
 __author__ = 'Morgan Funtowicz'
 
 
@@ -24,5 +26,6 @@ if __name__ == '__main__':
     # Configure logging
     logger = configure_logging(args.verbose)
     logger.info('Initializing Weather Station Edge Puller')
+    logger.debug('Device %(host)s: CPU: %(cpu)s (%(cores)d), Memory: %(memory)s Mb, Python: %(python)s', get_host_specs())
 
     logger.info('Weather Station Edge Puller exiting')
