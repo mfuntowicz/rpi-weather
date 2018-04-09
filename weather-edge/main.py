@@ -21,5 +21,10 @@ if __name__ == '__main__':
     # Start the daemon
     with WeatherDaemon() as daemon:
         daemon.run()
+        from sensors import BMP280
+
+        bmp = BMP280(mode=0)
+        print(bmp.read_temperature())
+        print(bmp.read_pressure())
 
     logger.info('Weather Station Edge Puller exiting')
