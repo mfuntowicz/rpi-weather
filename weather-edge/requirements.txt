@@ -1,1 +1,3 @@
+sqlalchemy
+typing
 psutil

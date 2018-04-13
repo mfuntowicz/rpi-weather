@@ -1,4 +1,7 @@
-from sensors import Sensor
+from typing import Dict, Tuple
+
+from weather.sensors import Sensor, SensorKind
+from weather.utils import SENSORS_LOGGER
 
 # Copyright (c) 2016
 # Author: Vitally Tezhe
@@ -67,9 +70,17 @@ BMP280_REGISTER_TEMPDATA_XLSB = 0xFC
 BMP280_READCMD = 0x3F
 
 
+def mode_to_name(mode):
+    if 0 <= mode <= BMP280_ULTRAHIGHRES:
+        return ['BMP280_ULTRALOWPOWER', 'BMP280_STANDARD', 'BMP280_HIGHRES', 'BMP280_ULTRAHIGHRES'][mode]
+    else:
+        raise ValueError('Invalid mode %d, should be [0, %d]' % (mode, BMP280_ULTRAHIGHRES))
+
+
 class BMP280(object):
     def __init__(self, mode=BMP280_STANDARD, address=BMP280_I2CADDR, i2c=None, **kwargs):
-        self._logger = logging.getLogger('BMP280')
+        self._logger = SENSORS_LOGGER
+
         # Check that mode is valid.
         if mode not in [BMP280_ULTRALOWPOWER, BMP280_STANDARD, BMP280_HIGHRES, BMP280_ULTRAHIGHRES]:
             raise ValueError(
@@ -78,16 +89,27 @@ class BMP280(object):
                 .format(mode)
             )
         self._mode = mode
+        self._address = address
+
         # Create I2C device.
         if i2c is None:
             import Adafruit_GPIO.I2C as I2C
             i2c = I2C
         self._device = i2c.get_i2c_device(address, **kwargs)
+
         # Load calibration values.
         self._load_calibration()
         self._tfine = 0
 
     # reading two bytes of data from each address as signed or unsigned, based on the Bosch docs
+
+    @property
+    def mode(self):
+        return self._mode
+
+    @property
+    def address(self):
+        return self._address
 
     def _load_calibration(self):
         self.cal_REGISTER_DIG_T1 = self._device.readU16LE(BMP280_REGISTER_DIG_T1)  # UINT16
@@ -226,3 +248,28 @@ class BMP280(object):
         pressure = float(self.read_pressure())
         p0 = pressure / pow(1.0 - altitude_m / 44330.0, 5.255)
         return p0
+
+
+class BMP280Sensor(Sensor):
+    def __init__(self, mode=BMP280_HIGHRES, address=BMP280_I2CADDR):
+        self._wrapped = BMP280(mode, address)
+
+    @property
+    def kind(self) -> Tuple[SensorKind, ...]:
+        return SensorKind.TEMPERATURE, SensorKind.PRESSURE
+
+    async def read(self) -> Dict[SensorKind, float]:
+        if self._wrapped is None:
+            raise ValueError('BMP280 device has been closed')
+
+        from asyncio import ensure_future
+        return ensure_future(lambda: {
+            SensorKind.TEMPERATURE: round(self._wrapped.read_temperature(), 4),
+            SensorKind.PRESSURE: round(self._wrapped.read_pressure(), 4)
+        })
+
+    def close(self) -> None:
+        self._wrapped = None
+
+    def __repr__(self):
+        return 'BMP280Sensor(resolution: %s, address: 0x%02x)' % (mode_to_name(self._wrapped.mode), self._wrapped.address)

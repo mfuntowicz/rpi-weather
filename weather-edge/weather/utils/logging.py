@@ -13,10 +13,10 @@ SENSORS_LOGGER = getLogger(SENSORS_LOGGER_NAME)
 def configure_logging(name: str, verbose: bool) -> Logger:
     if verbose:
         level = DEBUG
-        fmt = '%(asctime)s %(levelname)s:%(name)s %(filename)s:%(funcName)s::%(lineno)d %(message)s'
+        fmt = '%(asctime)s %(levelname)s %(name)s %(filename)s:%(funcName)s::%(lineno)d %(message)s'
     else:
         level = INFO
-        fmt = '%(asctime)s %(levelname)s:%(name)s %(filename)s:%(funcName)s %(message)s'
+        fmt = '%(asctime)s %(levelname)s %(name)s %(filename)s:%(funcName)s %(message)s'
 
     basicConfig(level=level, format=fmt)
     return getLogger(name)
