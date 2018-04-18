@@ -2,7 +2,6 @@ from argparse import ArgumentParser
 
 from weather import WeatherDaemon
 from weather.outputs import ConsoleOutput
-from weather.sensors.bmp280 import BMP280Sensor
 from weather.sensors.dummy import DummySensor
 from weather.utils import configure_logging, DAEMON_LOGGER_NAME
 from weather.utils.system import get_host_specs
@@ -26,9 +25,8 @@ if __name__ == '__main__':
     logger.debug('Device %(host)s: CPU: %(cpu)s (%(cores)d), Memory: %(memory)s Mb, Python: %(python)s', get_host_specs())
 
     # Start the daemon
-    with ConsoleOutput() as output:
-        with WeatherDaemon(output) as daemon:
-            daemon.register(DummySensor(), 1)
-            daemon.run()
+    with WeatherDaemon() as daemon:
+        daemon.register(DummySensor(), 1)
+        daemon.run()
 
     logger.info('Weather Station Edge Puller exiting')

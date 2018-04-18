@@ -1,8 +1,12 @@
 from abc import abstractmethod, ABC
 from typing import Dict
 
+from pyhocon import ConfigTree
+
 from weather.sensors import Sensor, SensorKind
 from weather.utils import getLogger
+
+OUTPUT_REGISTER = {}
 
 
 class Output(ABC):
@@ -25,11 +29,17 @@ class Output(ABC):
         raise NotImplemented()
 
 
-class ConsoleOutput(Output):
+class OutputBuilder(ABC):
+    @abstractmethod
+    def from_config(self, config: ConfigTree) -> Output:
+        raise NotImplemented()
 
-    @property
-    def name(self) -> str:
-        pass
 
-    async def save(self, sensor: Sensor, readouts: Dict[SensorKind, float]) -> None:
-        print('%r(%s)' % (sensor, ", ".join(['%s: %.2f' %(kind, value) for kind, value in readouts.items()])))
+def create_output(name: str) -> OutputBuilder:
+    if name in OUTPUT_REGISTER:
+        return OUTPUT_REGISTER[name]
+
+    raise KeyError('Output %s doesn\'t exist (available: %s)' % (name, list(OUTPUT_REGISTER.keys())))
+
+
+from .console import ConsoleOutput, ConsoleOutputBuilder

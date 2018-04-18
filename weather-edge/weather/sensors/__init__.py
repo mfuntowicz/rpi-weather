@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional
+from pyhocon import ConfigTree
 
 __author__ = 'Morgan Funtowicz'
 
@@ -24,6 +25,13 @@ class Sensor(ABC):
 
     @abstractmethod
     def close(self) -> None:
+        raise NotImplemented()
+
+
+class SensorFactory(ABC):
+
+    @abstractmethod
+    def build_from_config(self, config: ConfigTree) -> Optional[Sensor]:
         raise NotImplemented()
 
 

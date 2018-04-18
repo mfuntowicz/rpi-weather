@@ -1,6 +1,8 @@
 from asyncio import ensure_future, gather, get_event_loop, sleep, wait
-from functools import partial
-from weather.outputs import Output
+
+from pyhocon import ConfigFactory, ConfigTree
+
+from weather.outputs import Output, ConsoleOutput
 from weather.sensors import Sensor
 from weather.utils import DAEMON_LOGGER
 
@@ -8,16 +10,27 @@ __author__ = 'Morgan Funtowicz'
 __email__ = 'morgan.funtowicz@naverlabs.com'
 
 
+DEFAULT_CONFIG_FILE = 'default_config.json'
+
+
 class WeatherDaemon(object):
 
-    def __init__(self, output: Output):
-        if not isinstance(output, Output):
-            raise ValueError('output has to be instance of Output')
+    def __init__(self, config_file: str=None):
+        if config_file is None:
+            config_file = DEFAULT_CONFIG_FILE
 
-        self._output = output
+        self._config = ConfigFactory.parse_file(config_file)
         self._logger = DAEMON_LOGGER
         self._looper = get_event_loop()
+
+        if config_file is not DEFAULT_CONFIG_FILE:
+            self._config.with_fallback(DEFAULT_CONFIG_FILE)
+
+        self._output = None
         self._sensors = {}
+
+        # Read from the config
+        self._initialize_from_config(self._config)
 
         self._logger.debug('Created WeatherDaemon')
 
@@ -41,6 +54,25 @@ class WeatherDaemon(object):
 
         return self
 
+    def _initialize_from_config(self, config: ConfigTree) -> None:
+        # 1. Configure output
+        self._output_from_config(config['output'])
+
+        # 2. Configure sensors
+        self._sensors_from_config(config['sensors'])
+
+    def _output_from_config(self, config: ConfigTree) -> None:
+        if 'output' not in config:
+            self._logger.info('No output provided in configuration, defaulting to Console')
+            self._output = ConsoleOutput()
+        else:
+            from weather.outputs import create_output
+            builder = create_output(config['name'])
+            self._output = builder.from_config(ConfigTree() if 'args' not in config else config['args'])
+
+    def _sensors_from_config(self, config: ConfigTree) -> None:
+        return
+
     async def _scheduled_readout(self, sensor: Sensor, delay: int):
         self._logger.debug('Scheduling readout with delay: %.2f', delay)
 
@@ -48,7 +80,7 @@ class WeatherDaemon(object):
             readouts = await sensor.read()
             await self._output.save(sensor, readouts)
 
-            self._logger.debug('%r: %s', sensor, readouts)
+            self._logger.debug('Finished reading from %r', sensor)
             await sleep(delay)
 
     def register(self, sensor: Sensor, delay: float) -> None:
