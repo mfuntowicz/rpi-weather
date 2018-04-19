@@ -1,0 +1,4 @@
+Flask
+Flask-GraphQL
+SQLAlchemy
+graphene-sqlalchemy>=2.0

@@ -1,6 +1,14 @@
 from flask import Flask, render_template
+from flask_graphql import GraphQLView
+from weather.graphql import schema
 
 app = Flask(__name__)
+
+
+app.add_url_rule(
+    '/graphql',
+    view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True)
+)
 
 
 @app.route('/')
@@ -9,4 +17,4 @@ def home():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
