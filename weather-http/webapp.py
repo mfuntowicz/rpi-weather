@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from flask_graphql import GraphQLView
-from weather.graphql import schema
+from weather import schema
 
 app = Flask(__name__)
 
@@ -17,4 +17,4 @@ def home():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=8080, debug=True)

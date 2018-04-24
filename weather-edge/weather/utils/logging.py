@@ -4,9 +4,11 @@ __author__ = 'Morgan Funtowicz'
 __email__ = 'morgan.funtowicz@naverlabs.com'
 
 DAEMON_LOGGER_NAME = 'Daemon'
+OUTPUT_LOGGER_NAME = 'Output'
 SENSORS_LOGGER_NAME = 'Sensors'
 
 DAEMON_LOGGER = getLogger(DAEMON_LOGGER_NAME)
+OUTPUT_LOGGER = getLogger(OUTPUT_LOGGER_NAME)
 SENSORS_LOGGER = getLogger(SENSORS_LOGGER_NAME)
 
 

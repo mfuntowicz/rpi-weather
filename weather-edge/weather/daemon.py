@@ -56,13 +56,13 @@ class WeatherDaemon(object):
 
     def _initialize_from_config(self, config: ConfigTree) -> None:
         # 1. Configure output
-        self._output_from_config(config['output'])
+        self._output_from_config(config['output'] if 'output' in config else None)
 
         # 2. Configure sensors
-        self._sensors_from_config(config['sensors'])
+        self._sensors_from_config(config['sensors'] if 'sensors' in config else None)
 
     def _output_from_config(self, config: ConfigTree) -> None:
-        if 'output' not in config:
+        if config is None:
             self._logger.info('No output provided in configuration, defaulting to Console')
             self._output = ConsoleOutput()
         else:

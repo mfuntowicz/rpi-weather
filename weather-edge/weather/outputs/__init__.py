@@ -43,3 +43,4 @@ def create_output(name: str) -> OutputBuilder:
 
 
 from .console import ConsoleOutput, ConsoleOutputBuilder
+from .graphql import GraphQLOutput, GraphQLOutputBuilder
