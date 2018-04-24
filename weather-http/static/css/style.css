@@ -1,0 +1,19 @@
+body {
+    background-color: rgb(31, 31, 31);
+}
+
+@media (orientation:landscape) {
+    #root {
+        margin-top: 15px;
+        padding-left: 150px;
+        padding-right: 150px;
+    }
+}
+
+@media (orientation:portrait) {
+    #root {
+        margin-top: 15px;
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+}
