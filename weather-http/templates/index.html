@@ -1,73 +1,80 @@
 {% extends "base.html" %}
 {% block title %}Weather Station{% endblock %}
+
 {% block css %}
-{{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/override.css') }}"
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/override.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ol.css') }}" />
+{% endblock %}
+
+{% block javascript %}
+    {{ super() }}
+    <script type="application/javascript" src="{{ url_for('static', filename='js/ol.js') }}" ></script>
+    <script type="application/javascript" src="{{ url_for('static', filename='js/geolocation.js') }}" ></script>
 {% endblock %}
 
 
 {% block body %}
-<nav class="navbar sticky-top navbar-dark bg-dark">
-    <a class="navbar-brand mx-auto" href="#">Lessard-le-National (71530)</a>
-</nav>
-<div id="root" class="container-fluid align-content-center">
-    <div class="card-deck">
-        <div class="card text-white bg-dark m-1 mb-1">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <nav class="navbar sticky-top navbar-dark bg-dark">
+        <a class="navbar-brand mx-auto" href="#"></a>
+    </nav>
+    <div id="root" class="container-fluid align-content-center">
+        <div class="card-deck">
+            <div class="card text-white bg-dark m-1 mb-1">
+                <div class="card-img-top">
+                    <div id="map" class="map"></div>
+                </div>
+                <div class="card-footer text-center">
+                    <small class="text-light"> Meylan (38240)</small>
+                </div>
             </div>
-            <div class="card-footer text-center">
-                <small class="text-muted">Last updated 3 mins ago</small>
+            <div class="card text-white bg-dark m-1 mb-1">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+                <div class="card-footer text-center">
+                    <small class="text-light">Last updated 3 mins ago</small>
+                </div>
+            </div>
+            <div class="card text-white bg-dark m-1 mb-1">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+                <div class="card-footer text-center">
+                    <small class="text-light">Last updated 3 mins ago</small>
+                </div>
             </div>
         </div>
-        <div class="card text-white bg-dark m-1 mb-1">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <div class="card-deck">
+            <div class="card text-white bg-dark m-1 mb-1">
+                <div class="card-body card-">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+                <div class="card-footer text-center">
+                    <small class="text-light">Last updated 3 mins ago</small>
+                </div>
             </div>
-            <div class="card-footer text-center">
-                <small class="text-muted">Last updated 3 mins ago</small>
+            <div class="card text-white bg-dark m-1 mb-1">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+                <div class="card-footer text-center">
+                    <small class="text-light">Last updated 3 mins ago</small>
+                </div>
             </div>
-        </div>
-        <div class="card text-white bg-dark m-1 mb-1">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
-            <div class="card-footer text-center">
-                <small class="text-muted">Last updated 3 mins ago</small>
+            <div class="card text-white bg-dark m-1 mb-1">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+                <div class="card-footer text-center">
+                    <small class="text-light">Last updated 3 mins ago</small>
+                </div>
             </div>
         </div>
     </div>
-    <div class="card-deck">
-        <div class="card text-white bg-dark m-1 mb-1">
-            <div class="card-body card-">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
-            <div class="card-footer text-center">
-                <small class="text-muted">Last updated 3 mins ago</small>
-            </div>
-        </div>
-        <div class="card text-white bg-dark m-1 mb-1">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
-            <div class="card-footer text-center">
-                <small class="text-muted">Last updated 3 mins ago</small>
-            </div>
-        </div>
-        <div class="card text-white bg-dark m-1 mb-1">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
-            <div class="card-footer text-center">
-                <small class="text-muted">Last updated 3 mins ago</small>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}

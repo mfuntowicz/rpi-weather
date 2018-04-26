@@ -10,10 +10,9 @@
 </head>
 <body>
     {% block body %}{% endblock %}
-
     {% block javascript %}
-    <script type="application/javascript" href="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-    <script type="application/javascript" href="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script type="application/javascript" src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script type="application/javascript" src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
     {% endblock %}
 </body>
 </html>
