@@ -4,13 +4,6 @@
 {% block css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/override.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/ol.css') }}" />
-{% endblock %}
-
-{% block javascript %}
-    {{ super() }}
-    <script type="application/javascript" src="{{ url_for('static', filename='js/ol.js') }}" ></script>
-    <script type="application/javascript" src="{{ url_for('static', filename='js/geolocation.js') }}" ></script>
 {% endblock %}
 
 
@@ -21,7 +14,7 @@
     <div id="root" class="container-fluid align-content-center">
         <div class="card-deck">
             <div class="card text-white bg-dark m-1 mb-1">
-                <div class="card-img-top">
+                <div class="card-img-top p-3">
                     <div id="map" class="map"></div>
                 </div>
                 <div class="card-footer text-center">
