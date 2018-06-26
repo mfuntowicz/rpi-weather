@@ -1,48 +1,37 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const GLOBALS = {
-    'process.env.NODE_ENV': JSON.stringify('production')
-};
-const PROD = process.env.NODE_ENV === 'production';
 
 module.exports = {
-    entry: './static/js',
+    entry: './front/js/index.js',
     output: {
-        path: 'D:\\Workspace\\Python\\rpi-weather\\weather-http\\static\\dist',
-        filename: 'bundle.js',
+        filename: 'index.js',
+        path: path.resolve(__dirname, 'static/dist/')
     },
-    node: {
-        fs: "empty"
-    },
+    node: { fs: "empty" },
     target: 'web',
-    plugins: PROD ?
-        [
-            new webpack.optimize.OccurenceOrderPlugin(),
-            new webpack.ProvidePlugin({
-                $: 'jquery',
-                jQuery: 'jquery',
-            }),
-            new webpack.DefinePlugin(GLOBALS),
-            new ExtractTextPlugin('bundle.css'),
-            new webpack.optimize.DedupePlugin(),
-            new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}})
-        ] :
-        [
-            new webpack.ProvidePlugin({
-                $: 'jquery',
-                jQuery: 'jquery',
-            }),
-            new webpack.HotModuleReplacementPlugin(),
-            new webpack.NoEmitOnErrorsPlugin()
-        ],
-
+    plugins:  [
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            'React': 'react'
+        }),
+        new CleanWebpackPlugin(['static/dist/'])
+    ],
     module: {
         rules: [
             {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader"
+                }
+            },{
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader']
+                use: {
+                    loader: "css-loader"
+                }
             }
         ]
     }

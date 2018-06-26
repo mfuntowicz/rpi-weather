@@ -6,68 +6,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/override.css') }}"/>
 {% endblock %}
 
+{% block javascript %}
+    {{ super() }}
+    <script type="application/javascript" src="{{ url_for('static', filename='dist/index.js') }}"></script>
+{% endblock %}
+
 
 {% block body %}
-    <nav class="navbar sticky-top navbar-dark bg-dark">
-        <a class="navbar-brand mx-auto" href="#"></a>
-    </nav>
-    <div id="root" class="container-fluid align-content-center">
-        <div class="card-deck">
-            <div class="card text-white bg-dark m-1 mb-1">
-                <div class="card-img-top p-3">
-                    <div id="map" class="map"></div>
-                </div>
-                <div class="card-footer text-center">
-                    <small class="text-light"> Meylan (38240)</small>
-                </div>
-            </div>
-            <div class="card text-white bg-dark m-1 mb-1">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-                <div class="card-footer text-center">
-                    <small class="text-light">Last updated 3 mins ago</small>
-                </div>
-            </div>
-            <div class="card text-white bg-dark m-1 mb-1">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-                <div class="card-footer text-center">
-                    <small class="text-light">Last updated 3 mins ago</small>
-                </div>
-            </div>
-        </div>
-        <div class="card-deck">
-            <div class="card text-white bg-dark m-1 mb-1">
-                <div class="card-body card-">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-                <div class="card-footer text-center">
-                    <small class="text-light">Last updated 3 mins ago</small>
-                </div>
-            </div>
-            <div class="card text-white bg-dark m-1 mb-1">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-                <div class="card-footer text-center">
-                    <small class="text-light">Last updated 3 mins ago</small>
-                </div>
-            </div>
-            <div class="card text-white bg-dark m-1 mb-1">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-                <div class="card-footer text-center">
-                    <small class="text-light">Last updated 3 mins ago</small>
-                </div>
-            </div>
-        </div>
-    </div>
+      <div id="app"></div>
 {% endblock %}
