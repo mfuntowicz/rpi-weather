@@ -1,11 +1,17 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+import '!style-loader!css-loader!bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Container, Row} from "reactstrap";
+import { Container } from "reactstrap";
+import Geolocation from '../components/geolocation'
+
 
 class App extends React.Component{
    render(){
-        return <Container><h1>Hello World</h1></Container>
+        return (
+            <Container fluid={true}>
+                <Geolocation />
+            </Container>
+        )
     }
 }
 
