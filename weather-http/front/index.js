@@ -2,7 +2,7 @@ import '!style-loader!css-loader!bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Container } from "reactstrap";
-import Geolocation from '../components/geolocation'
+import Geolocation from './components/geolocation'
 
 
 class App extends React.Component{

@@ -1,29 +1,44 @@
 import React from 'react'
+import Enum from 'es6-enum'
 import { Card, CardBody, CardFooter } from 'reactstrap'
 import { ReactBingmaps } from 'react-bingmaps'
 
 const BINGS_MAPS_API_URL ='https://dev.virtualearth.net/REST/v1/Locations/';
 const BINGS_MAPS_API_KEY = 'Apnzh0uNWaiw_buhdeL9rV0cPWGYxx1QP78OuQOC3N8viktenmLih5FUc1Silvky';
 
+
+// Enumerate possible state to get localisation
+const GeolocationState = Enum("FETCHING", "DONE", "ERROR", "NOT_SUPPORTED");
+
+
 function DetailsFooter(props){
     let text;
-    if ('country' in props)
-        text = props.city + ' (' + props.country + ')';
-    else if ('error' in props)
-        text = props.errors;
-    else if ('city' in props && props.city === 'Fetching')
-        text = 'Fetching position...';
-    else
-        text = 'Unable to retrieve your position.';
+
+    switch(props.phase){
+        case GeolocationState.DONE:
+            text = props.position.city + ', (' + props.position.country + ')';
+            break;
+
+        case GeolocationState.FETCHING:
+            text = 'Fetching position...';
+            break;
+
+        case GeolocationState.NOT_SUPPORTED:
+            text = 'Browser doesn\' support geolocation';
+            break;
+
+        default:
+            text = 'Unable to get position';
+            break;
+    }
 
     return <CardFooter className={"text-center"}>{ text }</CardFooter>
 }
 
-
 export default class Geolocation extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {city:'Fetching', latitude: 0., longitude: 0.};
+        this.state = {phase: GeolocationState.FETCHING, position: {}};
     }
 
     render(){
@@ -34,7 +49,7 @@ export default class Geolocation extends React.Component{
                         bingmapKey={BINGS_MAPS_API_KEY}
                         mapTypeId={'canvasLight'}
                         navigationBarMode={'compact'}
-                        center={[this.state.latitude, this.state.longitude]}
+                        center={[this.state.position.latitude, this.state.position.longitude]}
                         pushPins={
                             [{
                                 'location': [this.state.latitude, this.state.longitude],
@@ -48,7 +63,7 @@ export default class Geolocation extends React.Component{
         )
     }
 
-    componentDidMount(){
+    componentWillMount(){
         let component = this;
 
         if(navigator.geolocation){
@@ -60,37 +75,34 @@ export default class Geolocation extends React.Component{
                     let address = data.resourceSets[0].resources[0].address;
 
                     component.setState({
-                        city: address.locality,
-                        zipcode: address.postalCode,
-                        country: address.countryRegion,
-                        adminDistrict: address.adminDistrict,
-                        adminDistrict2: address.adminDistrict2,
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
+                        phase: GeolocationState.DONE,
+                        position: {
+                            city: address.locality,
+                            zipcode: address.postalCode,
+                            country: address.countryRegion,
+                            adminDistrict: address.adminDistrict,
+                            adminDistrict2: address.adminDistrict2,
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        }
                     })
                 }).fail(() => {
                     component.setState({
-                        error: true,
-                        city: 'Unkown',
-                        zipcode: 'Unknown',
-                        country: 'An error occured',
-                        adminDistrict: '',
-                        adminDistrict2: '',
-                        latitude: 0.,
-                        longitude: 0.
+                        phase: GeolocationState.ERROR,
+                        position: {
+                            latitude: 0.,
+                            longitude: 0.
+                        }
                     })
                 });
             })
         }else{
             this.setState({
-                error: true,
-                city: 'Unkown',
-                zipcode: 'Unknown',
-                country: 'Browser doesn\'t support Geolocation',
-                adminDistrict: '',
-                adminDistrict2: '',
-                latitude: 0.,
-                longitude: 0.
+                phase: GeolocationState.NOT_SUPPORTED,
+                position: {
+                    latitude: 0.,
+                    longitude: 0.
+                }
             })
         }
     }
