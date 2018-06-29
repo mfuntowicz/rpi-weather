@@ -1,20 +1,8 @@
-from graphene import Boolean, ClientIDMutation, DateTime, Field, Float, ObjectType, Schema, String, relay
+from graphene import Boolean, ClientIDMutation, DateTime, Field, Float, List, ObjectType, Schema, String, relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
 
 from weather.data import session
 from weather.data.sensors import SensorReadoutModel
-
-
-class FilterableConnectionField(SQLAlchemyConnectionField):
-    RELAY_ARGS = ['first', 'last', 'before', 'after']
-
-    @classmethod
-    def get_query(cls, model, info, **args):
-        query = super(FilterableConnectionField, cls).get_query(model, info, **args)
-        for field, value in args.items():
-            if field not in cls.RELAY_ARGS:
-                query = query.filter(getattr(model, field) == value)
-        return query
 
 
 class SensorReadout(SQLAlchemyObjectType):
@@ -47,7 +35,29 @@ class CreateReadout(ClientIDMutation):
 
 class SensorReadoutQuery(ObjectType):
     node = relay.Node.Field()
-    readouts = FilterableConnectionField(SensorReadout, created_at=DateTime(), kind=String())
+
+    all_readouts = SQLAlchemyConnectionField(SensorReadout)
+    all_readouts_of = List(SensorReadout, kind=String())
+    all_readouts_of_between = List(SensorReadout, kind=String(), start=DateTime(), end=DateTime())
+
+    def resolve_all_readouts_of(_, info, **kwargs):
+        kind = kwargs['kind'].upper()
+
+        # Get query and filter
+        readouts_query = SensorReadout.get_query(info)
+        return readouts_query.filter(
+            SensorReadoutModel.kind.like(kind)
+        ).order_by(SensorReadoutModel.created_at).all()
+
+    def resolve_all_readouts_of_between(_, info, **kwargs):
+        kind, start, end = kwargs['kind'].upper(), kwargs['start'], kwargs['end']
+
+        # Get query and filter
+        readouts_query = SensorReadout.get_query(info)
+        return readouts_query.filter(
+            SensorReadoutModel.kind.like(kind) &
+            SensorReadoutModel.created_at.between(start, end)
+        ).order_by(SensorReadoutModel.created_at).all()
 
 
 class SensorReadoutMutation(ObjectType):
