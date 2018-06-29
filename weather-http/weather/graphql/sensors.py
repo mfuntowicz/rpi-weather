@@ -5,6 +5,18 @@ from weather.data import session
 from weather.data.sensors import SensorReadoutModel
 
 
+class FilterableConnectionField(SQLAlchemyConnectionField):
+    RELAY_ARGS = ['first', 'last', 'before', 'after']
+
+    @classmethod
+    def get_query(cls, model, info, **args):
+        query = super(FilterableConnectionField, cls).get_query(model, info, **args)
+        for field, value in args.items():
+            if field not in cls.RELAY_ARGS:
+                query = query.filter(getattr(model, field) == value)
+        return query
+
+
 class SensorReadout(SQLAlchemyObjectType):
     class Meta:
         model = SensorReadoutModel
@@ -35,7 +47,7 @@ class CreateReadout(ClientIDMutation):
 
 class SensorReadoutQuery(ObjectType):
     node = relay.Node.Field()
-    all_sensor_readouts = SQLAlchemyConnectionField(SensorReadout)
+    readouts = FilterableConnectionField(SensorReadout, created_at=DateTime(), kind=String())
 
 
 class SensorReadoutMutation(ObjectType):
