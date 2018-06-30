@@ -12,12 +12,8 @@ module.exports = {
     node: { fs: "empty" },
     target: 'web',
     plugins:  [
-        new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            'React': 'react'
-        }),
-        new CleanWebpackPlugin(['static/dist/'])
+        new CleanWebpackPlugin(['static/dist/']),
+        new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery', 'React': 'react' })
     ],
     module: {
         rules: [

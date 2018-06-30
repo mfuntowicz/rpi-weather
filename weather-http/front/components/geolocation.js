@@ -32,7 +32,7 @@ function DetailsFooter(props){
             break;
     }
 
-    return <CardFooter className={"text-center"}>{ text }</CardFooter>
+    return <CardFooter className={"text-center text-white"}>{ text }</CardFooter>
 }
 
 export default class Geolocation extends React.Component{
@@ -43,7 +43,7 @@ export default class Geolocation extends React.Component{
 
     render(){
         return (
-            <Card style={{height: '400px'}}>
+            <Card className={"bg-dark mb-3"}>
                 <CardBody>
                     <ReactBingmaps
                         bingmapKey={BINGS_MAPS_API_KEY}

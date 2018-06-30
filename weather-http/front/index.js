@@ -1,19 +1,36 @@
 import '!style-loader!css-loader!bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Container } from "reactstrap";
-import Geolocation from './components/geolocation'
+import {CardDeck, Container} from "reactstrap";
 
+// AMSChart import
+import * as am4core from "@amcharts/amcharts4/core";
+import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import {TimeCard} from "./components/time";
+am4core.useTheme(am4themes_animated);
 
-class App extends React.Component{
+// Moment configuration
+import moment from 'moment/src/moment'
+moment.locale(navigator.language);
+
+// App
+class WeatherStation extends React.Component{
    render(){
         return (
-            <Container fluid={true}>
-                <Geolocation />
+            <Container className={"p-5 mx-2"} fluid={true}>
+                <CardDeck>
+                    <TimeCard />
+                    <TimeCard />
+                    <TimeCard />
+                    <TimeCard />
+                </CardDeck>
             </Container>
         )
     }
 }
 
-
-ReactDOM.render(<App />, document.querySelector('#app'));
+// Render app
+ReactDOM.render(
+    <WeatherStation />,
+    document.querySelector('#app')
+);
