@@ -14,7 +14,7 @@ from weather.utils import OUTPUT_LOGGER
 class GraphQLOutput(Output):
 
     NAME = 'GraphQLOutput'
-    _CREATE_READOUT = 'mutation{ createReadout(input: { timestamp: "%s", kind: "%s", value: %.4f}){ readout{ id }}}'
+    _CREATE_READOUT = 'mutation{ createReadout(timestamp: "%s", kind: "%s", value: %.3f){ ok }}'
 
     def __init__(self, endpoint):
         super().__init__()

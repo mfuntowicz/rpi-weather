@@ -1,8 +1,39 @@
-from graphene import Boolean, ClientIDMutation, DateTime, Field, Float, List, ObjectType, Schema, String, relay
+import asyncio
+
+from graphene import Boolean,DateTime, Field, Float, List, Mutation, ObjectType, Schema, String, relay
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
 
 from weather.data import session
 from weather.data.sensors import SensorReadoutModel
+
+
+# In Memory pub-sub
+class AsyncioPubsub(object):
+
+    def __init__(self):
+        self.subscriptions = {}
+        self.sub_id = 0
+
+    async def publish(self, channel, payload):
+        if channel in self.subscriptions:
+            for q in self.subscriptions[channel].values():
+                await q.put(payload)
+
+    def subscribe_to_channel(self, channel):
+        self.sub_id += 1
+        q = asyncio.Queue()
+        if channel in self.subscriptions:
+            self.subscriptions[channel][self.sub_id] = q
+        else:
+            self.subscriptions[channel] = {self.sub_id: q}
+        return self.sub_id, q
+
+    def unsubscribe(self, channel, sub_id):
+        if sub_id in self.subscriptions.get(channel, {}):
+            del self.subscriptions[channel][sub_id]
+
+
+DEFAULT_PUB_SUB = AsyncioPubsub()
 
 
 class SensorReadout(SQLAlchemyObjectType):
@@ -11,22 +42,23 @@ class SensorReadout(SQLAlchemyObjectType):
         interfaces = (relay.Node, )
 
 
-class CreateReadout(ClientIDMutation):
-    class Input(object):
+class CreateReadout(Mutation):
+    class Arguments:
         timestamp = DateTime(required=False)
         kind = String(required=True)
         value = Float(required=True)
 
-    readout = Field(SensorReadout)
+    readout = Field(lambda: SensorReadout)
     ok = Boolean()
 
     @classmethod
-    def mutate(cls, _, info, input):
-        if 'timestamp' not in input:
+    def mutate(cls, _, info, kind, value, timestamp=None):
+        if timestamp is None:
             from datetime import datetime
-            input['timestamp'] = datetime.utcnow().isoformat()
+            timestamp = datetime.utcnow()
 
-        readout = SensorReadoutModel(created_at=input.get('timestamp'), kind=input.get('kind'), value=input.get('value'))
+        DEFAULT_PUB_SUB.publish('READOUTS', (timestamp, kind, value))
+        readout = SensorReadoutModel(created_at=timestamp, kind=kind, value=value)
         session.add(readout)
         session.commit()
         ok = True
@@ -64,4 +96,22 @@ class SensorReadoutMutation(ObjectType):
     createReadout = CreateReadout.Field()
 
 
-schema = Schema(mutation=SensorReadoutMutation, query=SensorReadoutQuery, types=[SensorReadout])
+class SensorReadoutSubscription(ObjectType):
+    readouts = Field(SensorReadout)
+
+    async def resolve_readouts(self, info):
+        try:
+            # pubsub subscribe_to_channel method returns
+            # subscription id and an asyncio.Queue
+            sub_id, q = DEFAULT_PUB_SUB.subscribe_to_channel('READOUTS')
+            while True:
+                payload = await q.get()
+                yield payload
+        except asyncio.CancelledError:
+            # unsubscribe subscription id from channel
+            # when coroutine is cancelled
+            DEFAULT_PUB_SUB.unsubscribe('READOUTS', sub_id)
+
+
+schema = Schema(mutation=SensorReadoutMutation, query=SensorReadoutQuery,
+                subscription=SensorReadoutSubscription, types=[SensorReadout])
