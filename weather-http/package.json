@@ -10,22 +10,25 @@
     "material-icons-react": "^1.0.0",
     "material-ui": "^0.20.1",
     "moment": "^2.22.2",
-    "npm": "^6.1.0",
+    "npm": "^6.3.0",
     "popper.js": "^1.14.3",
     "react": "^16.4.1",
     "react-bingmaps": "^3.5.0",
     "react-dom": "^16.4.1",
     "react-material-icons": "^1.0.3",
-    "react-relay": "^1.6.0",
+    "react-relay": "^1.6.2",
     "react-weathericons": "^1.0.4",
-    "reactstrap": "^6.1.0",
-    "socks": "^2.2.0"
+    "reactstrap": "^6.3.1",
+    "relay-runtime": "^1.6.2",
+    "socks": "^2.2.0",
+    "weathericons": "^2.1.0"
   },
   "name": "weather-http",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode=development"
+    "build": "webpack --mode=development",
+    "relay": "relay-compiler --src ./front --schema schema.graphql"
   },
   "repository": {
     "type": "git",
@@ -41,14 +44,18 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
+    "babel-plugin-relay": "^1.6.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^0.28.11",
     "extract-text-webpack-plugin": "^3.0.2",
     "json-parse-better-errors": "^1.0.2",
+    "relay-compiler": "^1.6.2",
+    "relay-compiler-webpack-plugin": "^0.11.0",
     "source-map-loader": "^0.2.3",
     "style-loader": "^0.21.0",
+    "url-loader": "^1.0.1",
     "webpack": "^4.12.0",
     "webpack-cli": "^3.0.8",
     "webpack-closure-compiler": "^2.1.6"
