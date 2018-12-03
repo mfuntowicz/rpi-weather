@@ -1,6 +1,6 @@
 import asyncio
 
-from graphene import Boolean,DateTime, Field, Float, List, Mutation, ObjectType, Schema, String, relay
+from graphene import Boolean, DateTime, Field, Float, List, Mutation, ObjectType, Schema, String, relay, Connection
 from graphene_sqlalchemy import SQLAlchemyObjectType, SQLAlchemyConnectionField
 
 from weather.data import session
@@ -42,6 +42,11 @@ class SensorReadout(SQLAlchemyObjectType):
         interfaces = (relay.Node, )
 
 
+class SensorReadoutConnection(Connection):
+    class Meta:
+        node = SensorReadout
+
+
 class CreateReadout(Mutation):
     class Arguments:
         timestamp = DateTime(required=False)
@@ -68,9 +73,10 @@ class CreateReadout(Mutation):
 class SensorReadoutQuery(ObjectType):
     node = relay.Node.Field()
 
-    all_readouts = SQLAlchemyConnectionField(SensorReadout)
+    all_readouts = SQLAlchemyConnectionField(SensorReadoutConnection)
     all_readouts_of = List(SensorReadout, kind=String())
     all_readouts_of_between = List(SensorReadout, kind=String(), start=DateTime(), end=DateTime())
+    latest_readouts_of = SQLAlchemyConnectionField(SensorReadoutConnection, kind=String())
 
     def resolve_all_readouts_of(_, info, **kwargs):
         kind = kwargs['kind'].upper()
@@ -90,6 +96,13 @@ class SensorReadoutQuery(ObjectType):
             SensorReadoutModel.kind.like(kind) &
             SensorReadoutModel.created_at.between(start, end)
         ).order_by(SensorReadoutModel.created_at).all()
+
+    def resolve_latest_readouts_of(_, info, **kwargs):
+        kind = kwargs['kind'].upper()
+
+        return SensorReadout.get_query(info).filter(
+            SensorReadoutModel.kind.like(kind)
+        ).order_by(SensorReadoutModel.created_at.desc()).limit(1)
 
 
 class SensorReadoutMutation(ObjectType):
