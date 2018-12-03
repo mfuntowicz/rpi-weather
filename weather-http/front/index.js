@@ -1,5 +1,5 @@
 import '!style-loader!css-loader!bootstrap/dist/css/bootstrap.css';
-import '!style-loader!css-loader!weathericons/css/weather-icons.css';
+// import '!style-loader!css-loader!weathericons/css/weather-icons.css';
 
 import moment from 'moment/src/moment';
 import React from 'react';
@@ -10,10 +10,11 @@ import { Button, Container, Col, Row } from "reactstrap";
 
 // Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faMapMarker } from '@fortawesome/free-solid-svg-icons'
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
 import {HomeInfoCard} from "./components/HomeInfoCard";
 
-library.add(faMapMarker);
+// Adding icons we want to include in the app
+library.add(faMapMarkerAlt);
 
 
 // App
@@ -76,7 +77,7 @@ class WeatherStation extends React.Component{
         return (
             <Container className={"p-5"} fluid={true}>
                 <Row className="m-4">
-                    <Col lg="4" md="4" sm="4" xl="4" xs="4">
+                    <Col className="col-4">
                       <HomeInfoCard
                           locale={ this.state.locale }
                           city={ this.state.position.city }
@@ -85,12 +86,12 @@ class WeatherStation extends React.Component{
                           country={ this.state.position.country }
                       />
                     </Col>
-                    <Col lg="4" md="4" sm="4" xl="4" xs="4">
+                    <Col className="col-4">
                        <WeatherCard title={"Titre 1"}>
                            <Button>OK</Button>
                        </WeatherCard>
                     </Col>
-                    <Col lg="4" md="4" sm="4" xl="4" xs="4">
+                    <Col className="col-4">
                         <WeatherCard title={"Titre 1"}>
                             <Button>OK</Button>
                         </WeatherCard>

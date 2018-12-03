@@ -6,7 +6,6 @@ class WeatherCard extends React.Component {
     render(){
         return (
             <Card body className={ this.props.cardClass || '' }>
-                <CardTitle>{this.props.title}</CardTitle>
                 {this.props.children}
             </Card>
         );
@@ -16,7 +15,6 @@ class WeatherCard extends React.Component {
 
 WeatherCard.propTypes = {
     cardClass: PropTypes.string,
-    title: PropTypes.string
 };
 
 

@@ -32,15 +32,15 @@ class PositionRow extends React.Component{
     render(){
         return (
             <Row>
-                <div className="col-3">
-                    <FontAwesomeIcon icon="map-marker" size={"4x"} />
+                <div className="col-2">
+                    <FontAwesomeIcon icon="map-marker-alt" size={"3x"} />
                 </div>
                 <div className="col-9">
                     <Row>
                         <h5>{ this.props.city } ({ this.props.zipcode })</h5>
                     </Row>
                     <Row>
-                        { this.props.region }, { this.props.country }
+                        { this.props.country }
                     </Row>
                 </div>
             </Row>
@@ -53,9 +53,9 @@ class DateTimeRow extends React.Component {
         return (
             <div>
                 <Row>
-                    <h2>
+                    <h5>
                         <Moment interval={1000} locale={ this.props.locale } format={"LTS"}/>
-                    </h2>
+                    </h5>
                 </Row>
                 <Row>
                     <Moment interval={1000} locale={ this.props.locale } format={"LL"}/>

@@ -18,11 +18,9 @@
     "react-dom": "^16.6.3",
     "react-moment": "^0.8.4",
     "react-relay": "^1.7.0",
-    "react-weathericons": "^1.0.4",
     "reactstrap": "^6.5.0",
     "relay-runtime": "^1.7.0",
-    "socks": "^2.2.2",
-    "weathericons": "^2.1.0"
+    "socks": "^2.2.2"
   },
   "name": "weather-http",
   "version": "1.0.0",
