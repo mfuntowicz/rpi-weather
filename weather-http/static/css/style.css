@@ -15,6 +15,10 @@ html body {
     border-radius: 10px !important;
 }
 
+.card-header-small-padding{
+    padding: 0.3rem 1.25rem !important;
+}
+
 .header-card {
     min-height: 150px !important;
 }
@@ -22,6 +26,80 @@ html body {
 .chart-card {
     min-height: 175px !important;
 }
+
+
+/* Gradients */
+.dusty-grass-gradient {
+    background-image: -webkit-linear-gradient(330deg, rgb(212, 252, 121) 0px, rgb(150, 230, 161) 100%);
+    background-image: -o-linear-gradient(330deg,#d4fc79 0,#96e6a1 100%);
+    background-image: linear-gradient(120deg, rgb(212, 252, 121) 0px, rgb(150, 230, 161) 100%);
+}
+
+.juicy-peach-gradient {
+    background-image: -webkit-gradient(linear, left top, right top, from(rgb(255, 236, 210)), to(rgb(252, 182, 159)));
+    background-image: -webkit-linear-gradient(left, rgb(255, 236, 210) 0px, rgb(252, 182, 159) 100%);
+    background-image: -o-linear-gradient(left,#ffecd2 0,#fcb69f 100%);
+    background-image: linear-gradient(to right, rgb(255, 236, 210) 0px, rgb(252, 182, 159) 100%);
+}
+
+.purple-gradient {
+    background: -o-linear-gradient(50deg,#ff6ec4,#7873f5) !important;
+    background: linear-gradient(40deg,#ff6ec4,#7873f5) !important;
+}
+
+.blue-gradient {
+    background: -o-linear-gradient(50deg,#45cafc,#303f9f) !important;
+    background: linear-gradient(40deg,#45cafc,#303f9f) !important;
+}
+
+.rare-wind-gradient {
+    background-image: -webkit-gradient(linear, left bottom, left top, from(rgb(168, 237, 234)), to(rgb(254, 214, 227)));
+    background-image: -webkit-linear-gradient(bottom, rgb(168, 237, 234) 0px, rgb(254, 214, 227) 100%);
+    background-image: -o-linear-gradient(bottom,#a8edea 0,#fed6e3 100%);
+    background-image: linear-gradient(to top, rgb(168, 237, 234) 0px, rgb(254, 214, 227) 100%);
+}
+
+.sunny-morning-gradient {
+    background-image: -webkit-linear-gradient(330deg, rgb(246, 211, 101) 0px, rgb(253, 160, 133) 100%);
+    background-image: -o-linear-gradient(330deg,#f6d365 0,#fda085 100%);
+    background-image: linear-gradient(120deg, rgb(246, 211, 101) 0px, rgb(253, 160, 133) 100%);
+}
+
+.young-passion-gradient {
+    background-image: -webkit-gradient(linear, left top, right top, from(rgb(255, 129, 119)), color-stop(0, rgb(255, 134, 122)), color-stop(21%, rgb(255, 140, 127)), color-stop(52%, rgb(249, 145, 133)), color-stop(78%, rgb(207, 85, 108)), to(rgb(177, 42, 91)));
+    background-image: -webkit-linear-gradient(left, rgb(255, 129, 119) 0px, rgb(255, 134, 122) 0px, rgb(255, 140, 127) 21%, rgb(249, 145, 133) 52%, rgb(207, 85, 108) 78%, rgb(177, 42, 91) 100%);
+    background-image: -o-linear-gradient(left,#ff8177 0,#ff867a 0,#ff8c7f 21%,#f99185 52%,#cf556c 78%,#b12a5b 100%);
+    background-image: linear-gradient(to right, rgb(255, 129, 119) 0px, rgb(255, 134, 122) 0px, rgb(255, 140, 127) 21%, rgb(249, 145, 133) 52%, rgb(207, 85, 108) 78%, rgb(177, 42, 91) 100%);
+}
+
+.amy-crisp-gradient {
+    background-image: -webkit-linear-gradient(330deg, rgb(166, 192, 254) 0px, rgb(246, 128, 132) 100%);
+    background-image: -o-linear-gradient(330deg,#a6c0fe 0,#f68084 100%);
+    background-image: linear-gradient(120deg, rgb(166, 192, 254) 0px, rgb(246, 128, 132) 100%);
+}
+
+
+.morpheus-den-gradient {
+    background-image: -webkit-gradient(linear, left bottom, left top, from(rgb(48, 207, 208)), to(rgb(51, 8, 103)));
+    background-image: -webkit-linear-gradient(bottom, rgb(48, 207, 208) 0px, rgb(51, 8, 103) 100%);
+    background-image: -o-linear-gradient(bottom,#30cfd0 0,#330867 100%);
+    background-image: linear-gradient(to top, rgb(48, 207, 208) 0px, rgb(51, 8, 103) 100%);
+}
+
+.deep-blue-gradient {
+    background-image: -webkit-linear-gradient(330deg, rgb(224, 195, 252) 0px, rgb(142, 197, 252) 100%);
+    background-image: -o-linear-gradient(330deg,#e0c3fc 0,#8ec5fc 100%);
+    background-image: linear-gradient(120deg, rgb(224, 195, 252) 0px, rgb(142, 197, 252) 100%);
+}
+
+.near-moon-gradient {
+    background-image: -webkit-gradient(linear, left bottom, left top, from(rgb(94, 231, 223)), to(rgb(180, 144, 202)));
+    background-image: -webkit-linear-gradient(bottom, rgb(94, 231, 223) 0px, rgb(180, 144, 202) 100%);
+    background-image: -o-linear-gradient(bottom,#5ee7df 0,#b490ca 100%);
+    background-image: linear-gradient(to top, rgb(94, 231, 223) 0px, rgb(180, 144, 202) 100%);
+}
+
+
 
 /* Round Progress Bar */
 .circle {

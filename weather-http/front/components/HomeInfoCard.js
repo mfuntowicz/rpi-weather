@@ -1,27 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { WeatherCard } from "./common";
-import { Row } from "reactstrap";
+import { Card, CardBody, Row } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Moment from "react-moment";
+import {getBackgroundWrtTime} from "../utils";
 
 
 class HomeInfoCard extends React.Component {
     render(){
         return (
-            <WeatherCard cardClass={ "header-card bg-primary text-white" }>
-                <Row className="m-1">
-                    <DateTimeRow locale={ this.props.locale }/>
-                </Row>
-                <Row className="m-1">
-                    <PositionRow
-                        city={ this.props.city }
-                        region={ this.props.region }
-                        zipcode= {this.props.zipcode }
-                        country={ this.props.country }
-                    />
-                </Row>
-            </WeatherCard>
+            <Card className={ getBackgroundWrtTime() + " header-card text-white" }>
+                <CardBody>
+                    <Row className="m-1">
+                        <DateTimeRow locale={ this.props.locale }/>
+                    </Row>
+                    <Row className="m-1">
+                        <PositionRow
+                            city={ this.props.city }
+                            region={ this.props.region }
+                            zipcode= {this.props.zipcode }
+                            country={ this.props.country }
+                        />
+                    </Row>
+                </CardBody>
+            </Card>
         )
     }
 }

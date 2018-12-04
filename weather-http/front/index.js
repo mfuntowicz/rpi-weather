@@ -10,13 +10,17 @@ import { Button, Container, Col, Row } from "reactstrap";
 
 // Font Awesome - Adding icons we want to include in the app
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
+import { faExclamation, faMapMarkerAlt, faThermometerThreeQuarters, faWind } from '@fortawesome/free-solid-svg-icons'
 import { HomeInfoCard } from "./components/HomeInfoCard";
+
+library.add(faExclamation);
 library.add(faMapMarkerAlt);
+library.add(faThermometerThreeQuarters);
+library.add(faWind);
 
 // App specific imports
 import { WeatherCard } from "./components/common";
-import { LatestTemperatureCard } from "./components/LatestTemperatureCard";
+import { LatestReadoutCard } from "./components/LatestReadoutCard";
 
 // App
 class WeatherStation extends React.Component{
@@ -93,34 +97,10 @@ class WeatherStation extends React.Component{
                       />
                     </Col>
                     <Col className="col-4">
-                        <LatestTemperatureCard />
+                        <LatestReadoutCard icon={"thermometer-three-quarters"} kind={ "TEMPERATURE" } unit={"°C"}/>
                     </Col>
                     <Col className="col-4">
-                        <LatestTemperatureCard />
-                    </Col>
-                </Row>
-                <Row className="m-4">
-                    <Col lg="6" md="6" sm="6" xl="6" xs="6">
-                        <WeatherCard cardClass={"chart-card"} title={"Titre 1"}>
-                            <Button>OK</Button>
-                        </WeatherCard>
-                    </Col>
-                    <Col lg="6" md="6" sm="6" xl="6" xs="6">
-                        <WeatherCard cardClass={"chart-card"} title={"Titre 1"}>
-                            <Button>OK</Button>
-                        </WeatherCard>
-                    </Col>
-                </Row>
-                <Row className="m-4">
-                    <Col lg="6" md="6" sm="6" xl="6" xs="6">
-                        <WeatherCard cardClass={"chart-card"} title={"Titre 1"}>
-                            <Button>OK</Button>
-                        </WeatherCard>
-                    </Col>
-                    <Col lg="6" md="6" sm="6" xl="6" xs="6">
-                        <WeatherCard cardClass={"chart-card"} title={"Titre 1"}>
-                            <Button>OK</Button>
-                        </WeatherCard>
+                        <LatestReadoutCard icon={"wind"} kind={ "PRESSURE" } unit={"km/h"} />
                     </Col>
                 </Row>
             </Container>
