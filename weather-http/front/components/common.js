@@ -1,16 +1,32 @@
-import {Card, CardTitle} from "reactstrap";
 import React from "react";
 import PropTypes from "prop-types"
+import { Card, CardBody } from "reactstrap";
 
 class WeatherCard extends React.Component {
     render(){
         return (
-            <Card body className={ this.props.cardClass || '' }>
-                {this.props.children}
+            <Card className={ this.props.cardClass || '' }>
+                <CardBody>
+                    {this.props.children}
+                </CardBody>
             </Card>
         );
     }
 }
+
+const ProgressCircle = () => {
+  return (
+      <div className="circle">
+          <div className="loader">
+              <div className="loader">
+                  <div className="loader">
+                      <div className="loader"/>
+                  </div>
+              </div>
+          </div>
+      </div>
+  )
+};
 
 
 WeatherCard.propTypes = {
@@ -18,4 +34,4 @@ WeatherCard.propTypes = {
 };
 
 
-export { WeatherCard }
+export { WeatherCard, ProgressCircle }
