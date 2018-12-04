@@ -10,18 +10,16 @@ class HomeInfoCard extends React.Component {
     render(){
         return (
             <WeatherCard cardClass={ "bg-primary text-white" }>
-                <Row className={"m-1"}>
-                    <div className={"col-4"}>
-                        <DateTimeRow locale={ this.props.locale }/>
-                    </div>
-                    <div className={"col-8"}>
-                        <PositionRow
-                            city={ this.props.city }
-                            region={ this.props.region }
-                            zipcode= {this.props.zipcode }
-                            country={ this.props.country }
-                        />
-                    </div>
+                <Row className="m-1">
+                    <DateTimeRow locale={ this.props.locale }/>
+                </Row>
+                <Row className="m-1">
+                    <PositionRow
+                        city={ this.props.city }
+                        region={ this.props.region }
+                        zipcode= {this.props.zipcode }
+                        country={ this.props.country }
+                    />
                 </Row>
             </WeatherCard>
         )
@@ -31,19 +29,14 @@ class HomeInfoCard extends React.Component {
 class PositionRow extends React.Component{
     render(){
         return (
-            <Row>
-                <div className="col-2">
-                    <FontAwesomeIcon icon="map-marker-alt" size={"3x"} />
-                </div>
-                <div className="col-9">
-                    <Row>
-                        <h5>{ this.props.city } ({ this.props.zipcode })</h5>
-                    </Row>
-                    <Row>
-                        { this.props.country }
-                    </Row>
-                </div>
-            </Row>
+            <div className="container-fluid text-center" >
+                <span className="mr-2">
+                    <FontAwesomeIcon icon="map-marker-alt" size={"1x"} />
+                </span>
+                <span>
+                    { this.props.city } ({this.props.zipcode}, { this.props.country })
+                </span>
+            </div>
         )
     }
 }
@@ -51,38 +44,40 @@ class PositionRow extends React.Component{
 class DateTimeRow extends React.Component {
     render(){
         return (
-            <div>
+            <div className="container-fluid">
                 <Row>
-                    <h5>
-                        <Moment interval={1000} locale={ this.props.locale } format={"LTS"}/>
+                    <h5 className="container-fluid text-center">
+                        <Moment interval={1000} locale={ this.props.locale } format={"LL"}/>
                     </h5>
                 </Row>
                 <Row>
-                    <Moment interval={1000} locale={ this.props.locale } format={"LL"}/>
+                    <h3 className="container-fluid text-center">
+                        <Moment interval={1000} locale={ this.props.locale } format={"LTS"}/>
+                    </h3>
                 </Row>
             </div>
         )
     }
 }
 
-
+// Define props types
 HomeInfoCard.propTypes = {
-    locale: PropTypes.string,
-    city:   PropTypes.string,
-    region: PropTypes.string,
+    locale:  PropTypes.string,
+    city:    PropTypes.string,
+    region:  PropTypes.string,
     zipcode: PropTypes.string,
     country: PropTypes.string
 };
 
 PositionRow.propTypes = {
-    city: PropTypes.string,
+    city:    PropTypes.string,
     country: PropTypes.string,
-    region: PropTypes.string,
+    region:  PropTypes.string,
     zipcode: PropTypes.string
 };
 
 DateTimeRow.propTypes = {
-    locale: PropTypes.string
+    locale:  PropTypes.string
 };
 
 export { HomeInfoCard }
