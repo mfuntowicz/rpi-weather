@@ -42,9 +42,9 @@ class SensorReadout(SQLAlchemyObjectType):
         interfaces = (relay.Node, )
 
 
-class SensorReadoutConnection(Connection):
-    class Meta:
-        node = SensorReadout
+# class SensorReadoutConnection(Connection):
+#     class Meta:
+#         node = SensorReadout
 
 
 class CreateReadout(Mutation):
@@ -73,10 +73,10 @@ class CreateReadout(Mutation):
 class SensorReadoutQuery(ObjectType):
     node = relay.Node.Field()
 
-    all_readouts = SQLAlchemyConnectionField(SensorReadoutConnection)
+    all_readouts = SQLAlchemyConnectionField(SensorReadout)
     all_readouts_of = List(SensorReadout, kind=String())
     all_readouts_of_between = List(SensorReadout, kind=String(), start=DateTime(), end=DateTime())
-    latest_readouts_of = SQLAlchemyConnectionField(SensorReadoutConnection, kind=String())
+    latest_readouts_of = SQLAlchemyConnectionField(SensorReadout, kind=String())
 
     def resolve_all_readouts_of(_, info, **kwargs):
         kind = kwargs['kind'].upper()

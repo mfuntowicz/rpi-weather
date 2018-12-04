@@ -1,21 +1,22 @@
 import '!style-loader!css-loader!bootstrap/dist/css/bootstrap.css';
+import '../static/css/style.css';
 // import '!style-loader!css-loader!weathericons/css/weather-icons.css';
 
 import moment from 'moment/src/moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { WeatherCard } from "./components/common";
 import { Button, Container, Col, Row } from "reactstrap";
 
 
-// Font Awesome
+// Font Awesome - Adding icons we want to include in the app
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
-import {HomeInfoCard} from "./components/HomeInfoCard";
-
-// Adding icons we want to include in the app
+import { HomeInfoCard } from "./components/HomeInfoCard";
 library.add(faMapMarkerAlt);
 
+// App specific imports
+import { WeatherCard } from "./components/common";
+import { LatestTemperatureCard } from "./components/LatestTemperatureCard";
 
 // App
 class WeatherStation extends React.Component{
@@ -30,6 +31,11 @@ class WeatherStation extends React.Component{
                latitude: 'unknown',
                longitude: 'unknown',
                altitude: 'unknown',
+               city: 'unknown',
+               region: 'unknown',
+               zipcode: 'unknown',
+               country: 'unknown',
+               province: 'unknown',
                accuracy: -1,
                success: false
            },
@@ -75,7 +81,7 @@ class WeatherStation extends React.Component{
 
     render(){
         return (
-            <Container className={"p-5"} fluid={true}>
+            <Container className={"p-6"} fluid={true}>
                 <Row className="m-4">
                     <Col className="col-4">
                       <HomeInfoCard
@@ -87,36 +93,32 @@ class WeatherStation extends React.Component{
                       />
                     </Col>
                     <Col className="col-4">
-                       <WeatherCard title={"Titre 1"}>
-                           <Button>OK</Button>
-                       </WeatherCard>
+                        <LatestTemperatureCard />
                     </Col>
                     <Col className="col-4">
-                        <WeatherCard title={"Titre 1"}>
+                        <LatestTemperatureCard />
+                    </Col>
+                </Row>
+                <Row className="m-4">
+                    <Col lg="6" md="6" sm="6" xl="6" xs="6">
+                        <WeatherCard cardClass={"chart-card"} title={"Titre 1"}>
+                            <Button>OK</Button>
+                        </WeatherCard>
+                    </Col>
+                    <Col lg="6" md="6" sm="6" xl="6" xs="6">
+                        <WeatherCard cardClass={"chart-card"} title={"Titre 1"}>
                             <Button>OK</Button>
                         </WeatherCard>
                     </Col>
                 </Row>
                 <Row className="m-4">
                     <Col lg="6" md="6" sm="6" xl="6" xs="6">
-                        <WeatherCard title={"Titre 1"}>
+                        <WeatherCard cardClass={"chart-card"} title={"Titre 1"}>
                             <Button>OK</Button>
                         </WeatherCard>
                     </Col>
                     <Col lg="6" md="6" sm="6" xl="6" xs="6">
-                        <WeatherCard title={"Titre 1"}>
-                            <Button>OK</Button>
-                        </WeatherCard>
-                    </Col>
-                </Row>
-                <Row className="m-4">
-                    <Col lg="6" md="6" sm="6" xl="6" xs="6">
-                        <WeatherCard title={"Titre 1"}>
-                            <Button>OK</Button>
-                        </WeatherCard>
-                    </Col>
-                    <Col lg="6" md="6" sm="6" xl="6" xs="6">
-                        <WeatherCard title={"Titre 1"}>
+                        <WeatherCard cardClass={"chart-card"} title={"Titre 1"}>
                             <Button>OK</Button>
                         </WeatherCard>
                     </Col>
