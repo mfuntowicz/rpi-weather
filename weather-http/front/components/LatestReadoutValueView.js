@@ -8,6 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 class LatestReadoutValueView extends React.Component {
 
     componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+        /***
+         * When we receive a props update, we check that this correspond to the "latestUpdate" props and thus
+         * we refetch from the server fresh data to render
+         */
         if (prevProps.latestUpdate !== this.props.latestUpdate) {
             this.props.relay.refetch(
                 {kind: this.props.kind},
