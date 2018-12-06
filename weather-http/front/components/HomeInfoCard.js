@@ -3,13 +3,12 @@ import PropTypes from 'prop-types'
 import { Card, CardBody, Row } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Moment from "react-moment";
-import {getBackgroundWrtTime} from "../utils";
 
 
 class HomeInfoCard extends React.Component {
     render(){
         return (
-            <Card className={ getBackgroundWrtTime() + " header-card text-white" }>
+            <Card className={ "header-card text-white" }>
                 <CardBody>
                     <Row className="m-1">
                         <DateTimeRow locale={ this.props.locale }/>

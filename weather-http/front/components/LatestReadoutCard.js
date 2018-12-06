@@ -1,10 +1,10 @@
 import React from 'react'
 import { QueryRenderer, graphql } from 'react-relay'
-import { Card, CardBody, CardHeader, CardFooter, Row } from "reactstrap";
+import { Card, CardBody, CardHeader } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { environment } from "../queries";
-import { getBackgroundWrtTime, getTextColorWrtTime } from "../utils";
+import { getTextColorWrtTime } from "../utils";
 import { ProgressCircle } from "./common";
 import LatestReadoutValueView from "./LatestReadoutValueView";
 
@@ -38,11 +38,11 @@ class LatestReadoutCard extends React.Component{
 
     _renderError(error){
         return(
-            <Card className={getBackgroundWrtTime() + " header-card"}>
+            <Card className={ "header-card" }>
                 <CardHeader className={getTextColorWrtTime(true) + " font-weight-light text-center card-header-small-padding"}>
                     { error.message }
                 </CardHeader>
-                <CardBody className={"text-center"}>
+                <CardBody className={ "text-center" }>
                     <FontAwesomeIcon icon={"exclamation"} size={"3x"} color={"red"}/>
                 </CardBody>
             </Card>
@@ -51,11 +51,11 @@ class LatestReadoutCard extends React.Component{
 
     _renderProgress(){
         return(
-            <Card className={getBackgroundWrtTime(true) + " header-card"}>
+            <Card className={ "header-card "}>
                 <CardHeader className={getTextColorWrtTime() + " font-weight-light text-center card-header-small-padding"}>
                     Updating...
                 </CardHeader>
-                <CardBody className={"text-center"}>
+                <CardBody className={ "text-center" }>
                     <ProgressCircle />
                 </CardBody>
             </Card>
@@ -65,7 +65,7 @@ class LatestReadoutCard extends React.Component{
     _renderDone(props){
         return (
             <LatestReadoutValueView
-                className={getTextColorWrtTime() + " " + getBackgroundWrtTime() + " header-card"}
+                className={getTextColorWrtTime() + " header-card"}
                 icon={ this.props.icon }
                 kind={ this.props.kind }
                 unit={ this.props.unit }

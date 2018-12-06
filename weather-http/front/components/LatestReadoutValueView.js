@@ -4,8 +4,6 @@ import { createRefetchContainer } from 'react-relay'
 import { Card, CardBody, CardHeader, Row } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { getTextColorWrtTime } from "../utils";
-
 
 class LatestReadoutValueView extends React.Component {
 
@@ -14,7 +12,7 @@ class LatestReadoutValueView extends React.Component {
 
         return (
             <Card className={ this.props.className }>
-                <CardHeader className={getTextColorWrtTime(true) + " font-weight-light text-center card-header-small-padding"}>
+                <CardHeader className={"font-weight-light text-center card-header-small-padding"}>
                     <span>
                         Last updated: <Moment fromNow>{ readout.createdAt }</Moment>
                     </span>
