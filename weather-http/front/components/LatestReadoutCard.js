@@ -66,6 +66,7 @@ class LatestReadoutCard extends React.Component{
         return (
             <LatestReadoutValueView
                 className={getTextColorWrtTime() + " header-card"}
+                latestUpdate={ this.props.latestUpdate }
                 icon={ this.props.icon }
                 kind={ this.props.kind }
                 unit={ this.props.unit }

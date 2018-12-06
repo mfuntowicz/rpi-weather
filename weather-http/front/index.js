@@ -1,26 +1,22 @@
 import '!style-loader!css-loader!bootstrap/dist/css/bootstrap.css';
 import '../static/css/style.css';
-// import '!style-loader!css-loader!weathericons/css/weather-icons.css';
-
 import moment from 'moment/src/moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Container, Col, Row } from "reactstrap";
-
-
+import {Col, Container, Row} from "reactstrap";
 // Font Awesome - Adding icons we want to include in the app
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faExclamation, faMapMarkerAlt, faThermometerThreeQuarters, faWind } from '@fortawesome/free-solid-svg-icons'
-import { HomeInfoCard } from "./components/HomeInfoCard";
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {faExclamation, faMapMarkerAlt, faThermometerThreeQuarters, faWind} from '@fortawesome/free-solid-svg-icons'
+import {HomeInfoCard} from "./components/HomeInfoCard";
+// App specific imports
+import {LatestReadoutCard} from "./components/LatestReadoutCard";
+import {ChartReadoutCard} from "./components/ChartReadoutCard"
+// import '!style-loader!css-loader!weathericons/css/weather-icons.css';
 
 library.add(faExclamation);
 library.add(faMapMarkerAlt);
 library.add(faThermometerThreeQuarters);
 library.add(faWind);
-
-// App specific imports
-import { WeatherCard } from "./components/common";
-import { LatestReadoutCard } from "./components/LatestReadoutCard";
 
 // App
 class WeatherStation extends React.Component{
@@ -28,9 +24,14 @@ class WeatherStation extends React.Component{
    constructor(props){
        super(props);
 
-       this.state = {
+       const now = moment();
+
+       this.state ={
            locale: 'en-us',
            lastUpdate: moment(),
+           to: moment(),
+           from: moment().subtract(12, 'hours'),
+           refreshInterval: undefined,
            position: {
                latitude: 'unknown',
                longitude: 'unknown',
@@ -78,9 +79,34 @@ class WeatherStation extends React.Component{
         });
     }
 
+    refresh(args){
+        const station = args.ref;
+        const state = station.state;
+
+        // Update latest refresh
+        state.lastUpdate =  moment();
+        state.to = moment();
+        state.from = moment().subtract(12, 'hours');
+
+        // Dispatch update
+        station.setState(state);
+    }
+
+    setRefreshInterval(interval){
+        if(this.state.refreshInterval !== undefined){
+            clearInterval(this.state.refreshInterval);
+        }
+
+        const state = this.state;
+        state.refreshInterval = setInterval(this.refresh, interval, {ref: this});
+
+        this.setState(state);
+    }
+
     componentDidMount(): void {
         this.getBrowserLang();
         this.getPosition();
+        this.setRefreshInterval(3000);
     }
 
     render(){
@@ -97,10 +123,26 @@ class WeatherStation extends React.Component{
                       />
                     </Col>
                     <Col className="col-4">
-                        <LatestReadoutCard icon={"thermometer-three-quarters"} kind={ "TEMPERATURE" } unit={"°C"}/>
+                        <LatestReadoutCard latestUpdate={ this.state.lastUpdate } icon={"thermometer-three-quarters"} kind={ "TEMPERATURE" } unit={"°C"}/>
                     </Col>
                     <Col className="col-4">
-                        <LatestReadoutCard icon={"wind"} kind={ "PRESSURE" } unit={"km/h"} />
+                        <LatestReadoutCard latestUpdate={ this.state.lastUpdate } icon={"wind"} kind={ "PRESSURE" } unit={"km/h"} />
+                    </Col>
+                </Row>
+                <Row className="m-4">
+                    <Col className="col-6">
+                        <ChartReadoutCard kind={ "TEMPERATURE" } chartColor={ "#000000" } from={ this.state.from } to={ this.state.to } />
+                    </Col>
+                    <Col className="col-6">
+                        <ChartReadoutCard kind={ "PRESSURE" } chartColor={ "#000000" } from={ this.state.from } to={ this.state.to } />
+                    </Col>
+                </Row>
+                <Row className="m-4">
+                    <Col className="col-6">
+                        <ChartReadoutCard kind={ "TEMPERATURE" } from={ this.state.from } to={ this.state.to } />
+                    </Col>
+                    <Col className="col-6">
+                        <ChartReadoutCard kind={ "PRESSURE" } from={ this.state.from } to={ this.state.to } />
                     </Col>
                 </Row>
             </Container>

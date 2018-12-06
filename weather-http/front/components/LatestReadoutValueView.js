@@ -7,6 +7,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 class LatestReadoutValueView extends React.Component {
 
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+        if (prevProps.latestUpdate !== this.props.latestUpdate) {
+            this.props.relay.refetch(
+                {kind: this.props.kind},
+                null,
+                null,
+                {force: true}
+            )
+        }
+    }
+
     render(){
         const readout = this.props.item.edges[0].node;
 
@@ -14,7 +25,7 @@ class LatestReadoutValueView extends React.Component {
             <Card className={ this.props.className }>
                 <CardHeader className={"font-weight-light text-center card-header-small-padding"}>
                     <span>
-                        Last updated: <Moment fromNow>{ readout.createdAt }</Moment>
+                        Last updated: <Moment fromNow>{ this.props.latestUpdate }</Moment>
                     </span>
                 </CardHeader>
                 <CardBody className={"d-flex align-items-center justify-content-center"}>

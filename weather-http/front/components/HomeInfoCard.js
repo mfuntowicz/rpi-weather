@@ -8,7 +8,7 @@ import Moment from "react-moment";
 class HomeInfoCard extends React.Component {
     render(){
         return (
-            <Card className={ "header-card text-white" }>
+            <Card className={ "header-card bg-dark text-white" }>
                 <CardBody>
                     <Row className="m-1">
                         <DateTimeRow locale={ this.props.locale }/>

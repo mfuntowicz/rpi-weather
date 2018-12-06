@@ -1,18 +1,12 @@
 html body {
-    background-color: rgb(31, 31, 31);
+    background-color: #7f8688;
     font-family: "Roboto", sans-serif;
     min-height:100%;
     height: 100%;
 }
 
-#root {
-    margin-top: 5px;
-    padding-left: 150px;
-    padding-right: 150px;
-}
-
 .card {
-    border-radius: 10px !important;
+    border-radius: 8px !important;
 }
 
 .card-header-small-padding{
@@ -24,7 +18,7 @@ html body {
 }
 
 .chart-card {
-    min-height: 175px !important;
+    min-height: 220px !important;
 }
 
 
