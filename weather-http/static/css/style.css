@@ -1,12 +1,25 @@
 html body {
-    background-color: #7f8688;
+    /*background-color: #7f8688;*/
+    /*background: #c6ffdd; !* fallback for old browsers *!*/
+    /*background: -webkit-linear-gradient(to right, #c6ffdd, #fbd786, #f7797d); !* Chrome 10-25, Safari 5.1-6 *!*/
+    /*background: linear-gradient(to right, #c6ffdd, #fbd786, #f7797d); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!*/
+
+
+    /*background: #7F7FD5;  !* fallback for old browsers *!*/
+    /*background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  !* Chrome 10-25, Safari 5.1-6 *!*/
+    /*background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!*/
+
+    /*background-image: linear-gradient( 135deg, #FAD7A1 10%, #E96D71 100%);*/
+
+    background-image: linear-gradient(to right bottom, #cb677a, #c05d72, #b55369, #aa4961, #9f3f59);
+
     font-family: "Roboto", sans-serif;
     min-height:100%;
     height: 100%;
 }
 
 .card {
-    border-radius: 8px !important;
+    border-radius: 15px !important;
 }
 
 .card-header-small-padding{

@@ -103,7 +103,7 @@ class WeatherStation extends React.Component{
         this.setState(state);
     }
 
-    componentDidMount(): void {
+    componentDidMount() {
         this.getBrowserLang();
         this.getPosition();
         this.setRefreshInterval(3000);
