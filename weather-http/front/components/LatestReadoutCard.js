@@ -51,7 +51,7 @@ class LatestReadoutCard extends React.Component{
 
     _renderProgress(){
         return(
-            <Card className={ "header-card "}>
+            <Card className={ "header-card shadow"}>
                 <CardHeader className={getTextColorWrtTime() + " font-weight-light text-center card-header-small-padding"}>
                     Updating...
                 </CardHeader>
@@ -65,7 +65,7 @@ class LatestReadoutCard extends React.Component{
     _renderDone(props){
         return (
             <LatestReadoutValueView
-                className={getTextColorWrtTime() + " header-card"}
+                className={ "header-card" }
                 latestUpdate={ this.props.latestUpdate }
                 icon={ this.props.icon }
                 kind={ this.props.kind }

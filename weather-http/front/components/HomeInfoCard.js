@@ -8,7 +8,7 @@ import Moment from "react-moment";
 class HomeInfoCard extends React.Component {
     render(){
         return (
-            <Card className={ "header-card bg-dark text-white" }>
+            <Card className={ "header-card bg-dark text-white shadow" }>
                 <CardBody>
                     <Row className="m-1">
                         <DateTimeRow locale={ this.props.locale }/>
@@ -30,7 +30,7 @@ class HomeInfoCard extends React.Component {
 class PositionRow extends React.Component{
     render(){
         return (
-            <div className="container-fluid text-center" >
+            <div className="container-fluid text-center font-weight-light" >
                 <span className="mr-2">
                     <FontAwesomeIcon icon="map-marker-alt" size={"1x"} />
                 </span>
@@ -47,12 +47,12 @@ class DateTimeRow extends React.Component {
         return (
             <div className="container-fluid">
                 <Row>
-                    <h5 className="container-fluid text-center">
+                    <h5 className="container-fluid text-center font-weight-light">
                         <Moment interval={1000} locale={ this.props.locale } format={"LL"}/>
                     </h5>
                 </Row>
                 <Row>
-                    <h3 className="container-fluid text-center">
+                    <h3 className="container-fluid text-center font-weight-bold">
                         <Moment interval={1000} locale={ this.props.locale } format={"LTS"}/>
                     </h3>
                 </Row>

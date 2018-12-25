@@ -52,7 +52,7 @@ class ChartReadoutCard extends React.Component {
 
     _renderError(error){
         return(
-            <Card className={ "header-card" }>
+            <Card className={ "header-card shadow" }>
                 <CardHeader className={getTextColorWrtTime(true) + " font-weight-light text-center card-header-small-padding"}>
                     { error.message }
                 </CardHeader>

@@ -1,13 +1,13 @@
 import React from 'react'
 import Moment from "react-moment";
-import { createRefetchContainer } from 'react-relay'
+import { createRefetchContainer, graphql } from 'react-relay'
 import { Card, CardBody, CardHeader, Row } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 class LatestReadoutValueView extends React.Component {
 
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         /***
          * When we receive a props update, we check that this correspond to the "latestUpdate" props and thus
          * we refetch from the server fresh data to render
@@ -26,7 +26,7 @@ class LatestReadoutValueView extends React.Component {
         const readout = this.props.item.edges[0].node;
 
         return (
-            <Card className={ this.props.className }>
+            <Card className={ this.props.className + " shadow" }>
                 <CardHeader className={"font-weight-light text-center card-header-small-padding"}>
                     <span>
                         Last updated: <Moment fromNow>{ this.props.latestUpdate }</Moment>
