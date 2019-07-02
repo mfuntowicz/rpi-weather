@@ -3,12 +3,12 @@
 
 {% block css %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/override.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/override.css') }}"/>
 {% endblock %}
 
 {% block javascript %}
     {{ super() }}
-    <script type="application/javascript" src="{{ url_for('static', filename='dist/index.js') }}"></script>
+    <script type="application/javascript" src="{{ url_for('static', path='dist/index.js') }}"></script>
 {% endblock %}
 
 

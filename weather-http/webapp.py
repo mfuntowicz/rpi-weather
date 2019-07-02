@@ -1,15 +1,21 @@
-from flask import Flask, render_template
-from flask_graphql import GraphQLView
-from weather.graphql import schema
+from fastapi import FastAPI
+from starlette.requests import Request
+from starlette.staticfiles import StaticFiles
+from starlette.templating import Jinja2Templates
 
-app = Flask(__name__)
-app.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
+# Setup FastAPI
+app = FastAPI(debug=True)
+app.mount('/static', StaticFiles(directory='static'), name='static')
+
+# Setup Templating
+templates = Jinja2Templates(directory='templates/')
 
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+@app.get('/')
+async def home(request: Request):
+    return templates.TemplateResponse('index.html', {'request': request})
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', ssl_context='adhoc', port=8080, debug=True)
+    from hypercorn import run, Config
+    run.run(Config.from_mapping({'bind': ['0.0.0.0:8000'], 'debug': True, 'application_path': 'webapp:app'}))

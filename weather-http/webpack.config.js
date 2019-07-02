@@ -13,7 +13,7 @@ module.exports = {
     target: 'web',
     plugins:  [
         new CleanWebpackPlugin(['static/dist/']),
-        new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery', 'React': 'react' })
+        new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery', 'React': 'react' }),
     ],
     module: {
         rules: [
@@ -23,7 +23,7 @@ module.exports = {
                 use: {
                     loader: "babel-loader"
                 }
-            },{
+            }, {
                 test: /\.css$/,
                 use: {
                     loader: "css-loader"

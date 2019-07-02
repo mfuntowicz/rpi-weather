@@ -1,4 +1,8 @@
-Flask
-Flask-GraphQL
+fastapi
+hypercorn
+graphene
+aiofiles
+starlette
+jinja2
 SQLAlchemy
 graphene-sqlalchemy>=2.0
