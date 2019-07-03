@@ -4,6 +4,7 @@
 {% block css %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', path='css/override.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}"/>
 {% endblock %}
 
 {% block javascript %}

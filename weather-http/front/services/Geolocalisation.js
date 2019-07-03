@@ -28,7 +28,9 @@ class GeocodeService extends GeolocationService {
 
 
 class OpenStreetMapService extends GeolocationService {
-    static OPEN_STREET_MAP_REVERSE_GEOCODING_API_URL = 'https://nominatim.openstreetmap.org/reverse?format=json&';
+    static get OPEN_STREET_MAP_REVERSE_GEOCODING_API_URL(){
+        return 'https://nominatim.openstreetmap.org/reverse?format=json&';
+    }
 
     getLocationInformationFromLatitudeLongitude(latitude, longitude, success, error) {
         axios.get(OpenStreetMapService.getUrl(latitude, longitude)).then(response => {

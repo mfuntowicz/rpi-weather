@@ -1,23 +1,15 @@
 import '!style-loader!css-loader!bootstrap/dist/css/bootstrap.css';
-import '../static/css/style.css';
+import '!style-loader!css-loader!../static/css/style.css';
+
 import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-// Font Awesome - Adding icons we want to include in the app
-import {library} from '@fortawesome/fontawesome-svg-core'
-import {faExclamation, faMapMarkerAlt, faThermometerThreeQuarters, faWind} from '@fortawesome/free-solid-svg-icons'
 
 // App specific imports
 import WeatherStationHeader from "./components/WeatherStationHeader";
 import {OpenStreetMapService} from "./services/Geolocalisation";
 import Position from "./lang/Position";
 // import '!style-loader!css-loader!weathericons/css/weather-icons.css';
-
-library.add(faExclamation);
-library.add(faMapMarkerAlt);
-library.add(faThermometerThreeQuarters);
-library.add(faWind);
 
 // App
 class WeatherStation extends React.Component{
