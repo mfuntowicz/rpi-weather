@@ -1,6 +1,5 @@
 import '!style-loader!css-loader!bootstrap/dist/css/bootstrap.css';
 import '../static/css/style.css';
-import axios from 'axios';
 import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -11,7 +10,7 @@ import {faExclamation, faMapMarkerAlt, faThermometerThreeQuarters, faWind} from 
 
 // App specific imports
 import WeatherStationHeader from "./components/WeatherStationHeader";
-import {GeocodeService} from "./services/Geolocalisation";
+import {OpenStreetMapService} from "./services/Geolocalisation";
 import Position from "./lang/Position";
 // import '!style-loader!css-loader!weathericons/css/weather-icons.css';
 
@@ -32,7 +31,7 @@ class WeatherStation extends React.Component{
            to: moment(),
            from: moment().subtract(12, 'hours'),
            refreshInterval: undefined,
-           position: undefined
+           position: Position.get_undefined()
        };
    }
 
@@ -48,15 +47,15 @@ class WeatherStation extends React.Component{
     getPosition(){
        let self = this;
         navigator.geolocation.getCurrentPosition(function(location) {
-            new GeocodeService().getLocationInformationFromLatitudeLongitude(
+            let location_service = new OpenStreetMapService();
+
+            location_service.getLocationInformationFromLatitudeLongitude(
                 location.coords.latitude,
                 location.coords.longitude,
-                (geolocation) => {
+                (position) => {
                     self.setState({
-                        ...state,
-                        position: Position.from_location({
-                            ...location, ...geolocation
-                        })
+                        ...self.state,
+                        position: position
                     });
                 }, (error) => {
                     console.log('Geolocation error:', error);

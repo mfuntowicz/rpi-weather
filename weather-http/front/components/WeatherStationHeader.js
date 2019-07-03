@@ -7,13 +7,11 @@ class WeatherStationHeader extends React.Component{
 
     constructor(props){
         super(props);
-
-        this.state = {
-
-        }
     }
 
     render(){
+        console.log(this.props.position);
+
         return (
             <Navbar color="dark" dark expand="md">
                 <NavbarBrand className={"text-white mx-auto"} href="/">
