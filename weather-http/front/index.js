@@ -4,12 +4,20 @@ import '!style-loader!css-loader!../static/css/style.css';
 import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {CardDeck, Container, Row} from "reactstrap";
+
+// Icons imports
+import { faClock } from '@fortawesome/free-solid-svg-icons'
 
 // App specific imports
 import WeatherStationHeader from "./components/WeatherStationHeader";
-import {OpenStreetMapService} from "./services/Geolocalisation";
 import Position from "./lang/Position";
-// import '!style-loader!css-loader!weathericons/css/weather-icons.css';
+import WeatherStationDateTimeCard from "./components/WeatherStationDateTimeCard";
+import { OpenStreetMapService } from "./services/Geolocalisation";
+import { LatestReadoutCard } from "./components/LatestReadoutCard";
+import WeatherStationCard from "./components/WeatherStationCard";
+import CardBody from "reactstrap/es/CardBody";
+import CardText from "reactstrap/es/CardText";
 
 // App
 class WeatherStation extends React.Component{
@@ -29,11 +37,9 @@ class WeatherStation extends React.Component{
 
     getBrowserLang() {
         if (navigator.languages !== undefined)
-            this.state.locale = navigator.languages[0];
+            this.setState({...this.state, locale: navigator.languages[0]});
         else
-            this.state.locale = navigator.language;
-
-        this.setState(this.state)
+            this.setState({...this.state, locale: navigator.language});
     }
 
     getPosition(){
@@ -63,8 +69,22 @@ class WeatherStation extends React.Component{
 
     render(){
         return (
-            <div>
+            <div className={"d-flex h-100 flex-column"}>
                 <WeatherStationHeader position={ this.state.position } />
+                <div className={"d-flex h-100 w-100 flex-column"}>
+                    <CardDeck tag={"p"} className={"m-0"}>
+                        <WeatherStationDateTimeCard locale={ this.state.locale } />
+                        <LatestReadoutCard icon={faClock} kind={"temperature"} latestUpdated={-1} unit={"time"} />
+                        <LatestReadoutCard icon={faClock} kind={"temperature"} latestUpdated={-1} unit={"time"} />
+                        <LatestReadoutCard icon={faClock} kind={"temperature"} latestUpdated={-1} unit={"time"} />
+                    </CardDeck>
+                    <CardDeck className={"flex-fill"}>
+                        <WeatherStationCard><CardBody><CardText>SalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalut</CardText></CardBody></WeatherStationCard>
+                        <WeatherStationCard><CardBody><CardText>SalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalut</CardText></CardBody></WeatherStationCard>
+                        <WeatherStationCard><CardBody><CardText>SalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalut</CardText></CardBody></WeatherStationCard>
+                        <WeatherStationCard><CardBody><CardText>SalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalutSalut</CardText></CardBody></WeatherStationCard>
+                    </CardDeck>
+                </div>
             </div>
         )
     }

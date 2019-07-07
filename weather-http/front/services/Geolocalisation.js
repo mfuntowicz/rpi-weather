@@ -48,7 +48,7 @@ class OpenStreetMapService extends GeolocationService {
             data.lon,
             0.,
             1.,
-            data.address.town,
+            data.address.town || data.address.city,
             data.address.state,
             data.address.postcode,
             data.address.country,

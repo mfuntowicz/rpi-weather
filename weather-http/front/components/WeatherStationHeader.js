@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Navbar, NavbarBrand} from "reactstrap";
+import {Button, ButtonGroup, Container, Navbar, NavbarBrand} from "reactstrap";
 import Position from "../lang/Position";
 
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
+import { faMapMarkerAlt, faSyncAlt, faCog } from '@fortawesome/free-solid-svg-icons'
 
 
 class WeatherStationHeader extends React.Component{
@@ -18,11 +18,15 @@ class WeatherStationHeader extends React.Component{
         console.log(this.props.position);
 
         return (
-            <Navbar color="light" className={"shadow rounded m-4"} dark expand="md">
+            <Navbar color="light" className={"shadow rounded my-4 mx-3 justify-content-between"} dark expand="md">
                 <NavbarBrand className={"text-dark mx-auto"} href="/">
                     <FontAwesomeIcon icon={faMapMarkerAlt } className={"mr-3"} size="lg" />
                     {this.props.position.city + ', ' + this.props.position.country}
                 </NavbarBrand>
+                {/*<span className={"float-right"}>*/}
+                {/*    <FontAwesomeIcon icon={ faSyncAlt } size="lg" />*/}
+                {/*    <FontAwesomeIcon icon={ faCog } size="lg" />*/}
+                {/*</span>*/}
             </Navbar>
         )
     }

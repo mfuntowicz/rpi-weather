@@ -1,47 +1,46 @@
 import React from 'react'
-import { QueryRenderer, graphql } from 'react-relay'
-import { Card, CardBody, CardHeader } from "reactstrap";
+import PropTypes from 'prop-types';
+// import { QueryRenderer, graphql } from 'react-relay'
+import { Card, CardBody, CardText, Spinner } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { environment } from "../queries";
-import { getTextColorWrtTime } from "../utils";
-import { ProgressCircle } from "./common";
+// import { environment } from "../queries";
 import LatestReadoutValueView from "./LatestReadoutValueView";
+import WeatherStationCard from "./WeatherStationCard";
 
 
 class LatestReadoutCard extends React.Component{
 
     render(){
-        return (
-            <QueryRenderer
-                environment={ environment }
-                query={graphql`
-                    query LatestReadoutCardQuery($kind: String!){
-                        data: latestReadoutsOf(kind: $kind){
-                           ...LatestReadoutValueView_item
-                        }
-                    }
-                `}
-                variables={{kind: this.props.kind }}
-                render={({error, props}) => {
-                    if (error) {
-                        return this._renderError(error);
-                    } else if (props) {
-                        return this._renderDone(props);
-                    }else {
-                        return this._renderProgress();
-                    }
-                }}
-            />
-        );
+        // return (
+        //     <QueryRenderer
+        //         environment={ environment }
+        //         query={graphql`
+        //             query LatestReadoutCardQuery($kind: String!){
+        //                 data: latestReadoutsOf(kind: $kind){
+        //                    ...LatestReadoutValueView_item
+        //                 }
+        //             }
+        //         `}
+        //         variables={{kind: this.props.kind }}
+        //         render={({error, props}) => {
+        //             if (error) {
+        //                 return this._renderError(error);
+        //             } else if (props) {
+        //                 return this._renderDone(props);
+        //             }else {
+        //                 return this._renderProgress();
+        //             }
+        //         }}
+        //     />
+        // );
+        return this._renderProgress();
     }
 
     _renderError(error){
+        console.log('Error: ' + error + ' while fetching data: ' + this.props.kind);
         return(
-            <Card className={ "header-card" }>
-                <CardHeader className={getTextColorWrtTime(true) + " font-weight-light text-center card-header-small-padding"}>
-                    { error.message }
-                </CardHeader>
+            <Card>
                 <CardBody className={ "text-center" }>
                     <FontAwesomeIcon icon={"exclamation"} size={"3x"} color={"red"}/>
                 </CardBody>
@@ -51,14 +50,15 @@ class LatestReadoutCard extends React.Component{
 
     _renderProgress(){
         return(
-            <Card className={ "header-card shadow"}>
-                <CardHeader className={getTextColorWrtTime() + " font-weight-light text-center card-header-small-padding"}>
-                    Updating...
-                </CardHeader>
-                <CardBody className={ "text-center" }>
-                    <ProgressCircle />
+            <WeatherStationCard>
+                <CardBody>
+                    <CardText className={"text-center justify-content-center"}>
+                        <Spinner type="grow" color="primary" style={{ width: '3rem', height: '3rem' }}>
+                            <span>Loading...</span>
+                        </Spinner>
+                    </CardText>
                 </CardBody>
-            </Card>
+            </WeatherStationCard>
         )
     }
 
@@ -75,5 +75,13 @@ class LatestReadoutCard extends React.Component{
         )
     }
 }
+
+
+LatestReadoutCard.propTypes = {
+    latestUpdated: PropTypes.number,
+    icon: PropTypes.object,
+    kind: PropTypes.string,
+    unit: PropTypes.string,
+};
 
 export { LatestReadoutCard }

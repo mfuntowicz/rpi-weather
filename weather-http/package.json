@@ -18,7 +18,7 @@
     "react-dom": "^16.8.6",
     "react-moment": "^0.8.4",
     "react-relay": "^1.7.0",
-    "reactstrap": "^6.5.0",
+    "reactstrap": "^8.0.0",
     "relay-runtime": "^1.7.0",
     "socks": "^2.3.2"
   },
