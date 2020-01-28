@@ -1,3 +1,15 @@
+.card {
+    border-radius: 15px !important;
+}
+
 .card .bg-dark{
     background-color: rgb(61, 61, 61) !important;
+}
+
+.h-10 {
+    height: 10% !important;
+}
+
+.h-85 {
+    height: 85% !important;
 }

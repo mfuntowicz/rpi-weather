@@ -1,15 +1,30 @@
-from flask import Flask, render_template
-from flask_graphql import GraphQLView
-from weather.graphql import schema
+from fastapi import FastAPI
+from starlette.middleware.gzip import GZipMiddleware
+from starlette.responses import FileResponse, UJSONResponse
+from starlette.staticfiles import StaticFiles
+from uvicorn import run
 
-app = Flask(__name__)
-app.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
+
+# Setup FastAPI
+app = FastAPI(debug=True)
+app.mount('/static', StaticFiles(directory='static'), name='static')
+app.add_middleware(GZipMiddleware, minimum_size=512)
 
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+@app.get('/')
+def home() -> FileResponse:
+    return FileResponse('static/index.html')
+
+
+@app.put('/api/{}/{}')
+async def insert():
+    pass
+
+
+@app.get('/api/{sensor}')
+async def read() -> UJSONResponse:
+    return UJSONResponse({"key": "value"})
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', ssl_context='adhoc', port=8080, debug=True)
+    run(app)

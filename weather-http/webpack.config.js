@@ -4,31 +4,50 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 
 module.exports = {
-    entry: './front/index.js',
-    output: {
-        filename: 'index.js',
-        path: path.resolve(__dirname, 'static/dist/')
+    // Enable sourcemaps for debugging webpack's output.
+    devtool: "source-map",
+    mode: "development",
+    resolve: {
+        // Add '.ts' and '.tsx' as resolvable extensions.
+        extensions: [".ts", ".tsx", ".js", ".jsx"]
     },
-    node: { fs: "empty" },
     target: 'web',
     plugins:  [
         new CleanWebpackPlugin(['static/dist/']),
-        new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery', 'React': 'react' })
+        // new webpack.ProvidePlugin({ 'React': 'react' }),
     ],
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.ts(x?)$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: "babel-loader"
-                }
-            },{
+                use: [
+                    {
+                        loader: "ts-loader"
+                    }
+                ]
+            },
+            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+            {
+                enforce: "pre",
+                test: /\.js$/,
+                loader: "source-map-loader"
+            },
+            {
                 test: /\.css$/,
                 use: {
                     loader: "css-loader"
                 }
             }
         ]
+    },
+
+    // When importing a module whose path matches one of the following, just
+    // assume a corresponding global variable exists and use that instead.
+    // This is important because it allows us to avoid bundling all of our
+    // dependencies, which allows browsers to cache those libraries between builds.
+    externals: {
+        "react": "React",
+        "react-dom": "ReactDOM"
     }
 };

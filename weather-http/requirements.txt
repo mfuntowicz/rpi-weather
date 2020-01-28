@@ -1,4 +1,7 @@
-Flask
-Flask-GraphQL
+uvicorn
+fastapi
+hypercorn
+aiofiles
+starlette
 SQLAlchemy
-graphene-sqlalchemy>=2.0
+ujson
