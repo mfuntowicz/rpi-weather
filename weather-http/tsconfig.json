@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "outDir": "./static/dist/",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "esnext",
+    "jsx": "react",
+    "rootDir": "src",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "preserveConstEnums": true,
+    "allowJs": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "moduleResolution": "node",
+    "baseUrl": "src"
+  },
+  "files": [
+    "src/index.tsx",
+    "src/WeatherStation.tsx"
+  ],
+  "exclude": [
+    "./node_modules/*"
+  ],
+  "types": [
+    "react",
+    "react-dom",
+    "reactstrap"
+  ]
+}
