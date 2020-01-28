@@ -1,13 +1,33 @@
-from sqlalchemy import create_engine
+from contextlib import contextmanager
+
+import databases
+from sqlalchemy import create_engine, Column, DateTime, Integer, MetaData, Table, String, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-engine = create_engine('sqlite:///database.sqlite3?check_same_thread=False', convert_unicode=True, echo=True)
-session = scoped_session(sessionmaker(bind=engine, autocommit=False, autoflush=True))
+DATABASE_URL = 'sqlite:///readouts.sqlite3'
+
+database = databases.Database(DATABASE_URL)
+metadata = MetaData()
+
+readouts = Table(
+    "sensors",
+    metadata,
+    Column("created_at", DateTime, primary_key=True),
+    Column("kind", String, primary_key=True),
+    Column("readout", Float),
+)
+
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False}, convert_unicode=True, echo=True)
+SessionLocal = scoped_session(sessionmaker(bind=engine, autocommit=False, autoflush=True))
+metadata.create_all(engine)
 
 Base = declarative_base()
-Base.query = session.query_property()
 
 
-from .sensors import SensorReadoutModel
-Base.metadata.tables['TBL_SENSOR_READOUTS'].create(bind=engine, checkfirst=True)
+def get_database():
+    try:
+        session = SessionLocal()
+        yield session
+    finally:
+        session.close()
