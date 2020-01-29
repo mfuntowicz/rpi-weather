@@ -10,7 +10,7 @@ export class OpenStreetMapPositionProvider extends PositionProvider implements I
         return {
             latitude: response.lat,
             longitude: response.lon,
-            city: response.address.city,
+            city: response.address.town || response.address.city,
             province: response.address.county,
             country: response.address.country,
             zipcode: response.address.postcode,
