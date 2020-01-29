@@ -5,7 +5,6 @@ export abstract class PositionProvider implements IGeographicInformationProvider
     static DEFAULT: GeoLocation = {
         latitude: undefined,
         longitude: undefined,
-        accuracy: undefined,
         city: undefined,
         zipcode: undefined,
         country: undefined,
