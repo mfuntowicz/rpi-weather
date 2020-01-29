@@ -15,7 +15,7 @@ from data import database, readouts
 from data.schema import SensorReadout
 
 app = FastAPI(debug=True)
-app.mount('/static', StaticFiles(directory='static'), name='static')
+app.mount('/static', StaticFiles(directory='dist'), name='dist')
 app.add_middleware(GZipMiddleware, minimum_size=512)
 
 
@@ -33,7 +33,7 @@ async def shutdown():
 # HTTP UI Endpoints
 @app.get('/')
 def home() -> FileResponse:
-    return FileResponse('static/index.html')
+    return FileResponse('dist/index.html')
 
 
 # REST Endpoints
