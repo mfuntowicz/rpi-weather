@@ -38,6 +38,8 @@
     "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^2.1.1",
     "json-parse-better-errors": "^1.0.2",
+    "node-sass": "^4.13.1",
+    "sass-loader": "^8.0.2",
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
     "ts-loader": "^6.2.1",
