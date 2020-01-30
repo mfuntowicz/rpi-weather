@@ -4,8 +4,8 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { WeatherStation } from "./WeatherStation";
-import {PositionProvider} from "./positions/PositionProvider";
-import {OpenStreetMapPositionProvider} from "./positions/OpenStreetMapPositionProvider";
+import {PositionProvider} from "./services/positions/PositionProvider";
+import {OpenStreetMapPositionProvider} from "./services/positions/OpenStreetMapPositionProvider";
 
 let positionProvider: PositionProvider = new OpenStreetMapPositionProvider();
 

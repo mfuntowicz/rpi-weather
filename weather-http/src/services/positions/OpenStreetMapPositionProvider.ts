@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {GeoLocation} from '../lang/GeoLocation';
+import {GeoLocation} from '../../lang/GeoLocation';
 import {PositionProvider} from "./PositionProvider";
 import {IGeographicInformationProvider} from "./IGeographicInformationProvider";
 

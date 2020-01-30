@@ -1,4 +1,4 @@
-import {GeoLocation} from "../lang/GeoLocation";
+import {GeoLocation} from "../../lang/GeoLocation";
 import {IGeographicInformationProvider} from "./IGeographicInformationProvider";
 
 export abstract class PositionProvider implements IGeographicInformationProvider{
