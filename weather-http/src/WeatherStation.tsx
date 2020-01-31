@@ -1,15 +1,17 @@
-import 'bootstrap/dist/css/bootstrap.css';
-
 import * as React from 'react';
-import {CardDeck, Container, Row} from "reactstrap";
-import {PositionProvider} from "./positions/PositionProvider";
+import Moment from "react-moment";
+import { now } from 'moment';
+import {CardDeck, CardText, Container, Row} from "reactstrap";
+import {PositionProvider} from "./services/positions/PositionProvider";
 import {GeoLocation} from "./lang/GeoLocation";
+import {WeatherCard} from "./components/cards/WeatherCard";
 
 export interface WeatherStationProps {
     positionProvider: PositionProvider
 }
 
 export interface WeatherStationState {
+    time: number,
     position: GeoLocation
 }
 
@@ -19,7 +21,8 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
         super(props);
 
         this.state = {
-           position: props.positionProvider.getDefault()
+            time: now(),
+            position: props.positionProvider.getDefault()
         }
     }
 
@@ -35,9 +38,31 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
     render(): any {
         return <div className={"d-flex h-100 flex-column"}>
             <Container fluid={ true } className={"container-fluid d-flex h-85 w-100 flex-column mb-3"}>
-                <CardDeck className={"mb-3"}>
-                    {this.state.position.city || "undefined"}
-                </CardDeck>
+                <Row>
+                    <CardDeck className={"mx-1 flex-fill"}>
+                        <WeatherCard>
+                            <CardText className={"text-center"}>
+                                <Moment className={"text-headline"} locale={ navigator.languages ? navigator.languages[0] : navigator.language } interval={1} format={"LT"}/>
+                                <br/>
+                                <Moment className={"text-headline-subtitle"} locale={ navigator.languages ? navigator.languages[0] : navigator.language } interval={1} format={"ddd LL"}/>
+                            </CardText>
+                        </WeatherCard>
+                        <WeatherCard>
+                            <CardText>
+                                <Moment locale={ navigator.languages ? navigator.languages[0] : navigator.language } interval={1} format={"LL"}/>
+                                <br />
+                                <Moment locale={ navigator.languages ? navigator.languages[0] : navigator.language } interval={1} format={"LT"}/>
+                            </CardText>
+                        </WeatherCard>
+                        <WeatherCard>
+                            <CardText>
+                                <Moment locale={ navigator.languages ? navigator.languages[0] : navigator.language } interval={1} format={"LL"}/>
+                                <br />
+                                <Moment locale={ navigator.languages ? navigator.languages[0] : navigator.language } interval={1} format={"LT"}/>
+                            </CardText>
+                        </WeatherCard>
+                    </CardDeck>
+                </Row>
                 <CardDeck className={"flex-fill"}>
                     <Row className={"mx-0 mb-3 w-100"}>
                     </Row>
