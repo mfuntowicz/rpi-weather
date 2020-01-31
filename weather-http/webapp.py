@@ -3,6 +3,7 @@ from datetime import datetime
 from random import randint
 
 from fastapi import FastAPI, Query, Body, Depends
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.responses import FileResponse, UJSONResponse
@@ -45,13 +46,23 @@ async def insert(readout: SensorReadout = Body(None)):
 
 
 @app.get('/api/readouts', response_model=SensorReadout)
-async def read(start: int = Query(-1), end: int = Query(-1)) -> UJSONResponse:
-    return UJSONResponse(SensorReadout(0, 'dummy', datetime.now().timestamp(), randint(0, 100)))
+async def read(start: datetime = Query(datetime.now()), end: datetime = Query(datetime.now())) -> UJSONResponse:
+    query = readouts.select(readouts.c.created_at.between(start, end))
+    result = await database.fetch_all(query)
+    items = list(map(lambda e: dict(zip(query.columns, e)), result))
+    return UJSONResponse(items)
 
 
 @app.get('/api/readouts/{sensor}', response_model=SensorReadout)
-async def read_sensor(sensor: str, start: int = Query(-1), end: int = Query(-1)) -> UJSONResponse:
-    return UJSONResponse(SensorReadout(0, 'dummy', datetime.now().timestamp(), randint(0, 100)))
+async def read_sensor(sensor: str, start: datetime = Query(datetime.now()), end: datetime = Query(datetime.now())) -> UJSONResponse:
+    # "WHERE kind = :sensor AND createdAt BETWEEN :start AND :end",
+    # values={"sensor": sensor, "start": start, "end": end}
+
+    query = readouts.select(
+        and_(readouts.c.kind == sensor, readouts.c.created_at.between(start, end)),
+    )
+
+    return UJSONResponse(await database.fetch_all(query))
 
 
 if __name__ == '__main__':
