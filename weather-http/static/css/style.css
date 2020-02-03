@@ -1,27 +1,31 @@
 html, body {
-    /*background-color: #7f8688;*/
-    /*background: #c6ffdd; !* fallback for old browsers *!*/
-    /*background: -webkit-linear-gradient(to right, #c6ffdd, #fbd786, #f7797d); !* Chrome 10-25, Safari 5.1-6 *!*/
-    /*background: linear-gradient(to right, #c6ffdd, #fbd786, #f7797d); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!*/
+    background: #4b6cb7;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #182848, #4b6cb7);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #182848, #4b6cb7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
-
-    /*background: #7F7FD5;  !* fallback for old browsers *!*/
-    /*background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);  !* Chrome 10-25, Safari 5.1-6 *!*/
-    /*background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!*/
-
-    /*background-image: linear-gradient( 135deg, #FAD7A1 10%, #E96D71 100%);*/
-
-    background-color: #F8F8F8;
-    color: #626262;
+    /*background-color: #F8F8F8;*/
+    /*color: #626262;*/
     font-family: "Roboto", sans-serif;
     min-height:100%;
     height: 100%;
 }
 
+.text-headline {
+    font-size: 30px !important;
+    font-weight: 700 !important;
+}
+
+.text-headline-subtitle {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+}
+
 .weather-card {
-    border-radius: 7px !important;
-    background-color: #333 !important;
-    border-color: #333 !important;
+    margin: 30px auto;
+    border-radius: 30px !important;
+    background-color: rgba(0, 0, 0, 0.1) !important;
+    border-color: rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 5px 5px 30px 7px rgba(0,0,0,0.25), -5px -5px 30px 7px rgba(0, 0, 0, 0.22);
 }
 
 .card-header-small-padding{
@@ -38,6 +42,12 @@ html, body {
 
 
 /* Gradients */
+.frost-gradient {
+    background: #000428;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #004e92, #000428);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #004e92, #000428); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
 .dusty-grass-gradient {
     background-image: -webkit-linear-gradient(330deg, rgb(212, 252, 121) 0px, rgb(150, 230, 161) 100%);
     background-image: -o-linear-gradient(330deg,#d4fc79 0,#96e6a1 100%);
@@ -107,7 +117,6 @@ html, body {
     background-image: -o-linear-gradient(bottom,#5ee7df 0,#b490ca 100%);
     background-image: linear-gradient(to top, rgb(94, 231, 223) 0px, rgb(180, 144, 202) 100%);
 }
-
 
 
 /* Round Progress Bar */
