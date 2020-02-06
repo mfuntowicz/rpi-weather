@@ -1,18 +1,23 @@
 import * as React from 'react';
 import Moment from "react-moment";
-import { now } from 'moment';
+import * as moment from 'moment';
+import {Map as ImmutableMap} from "immutable";
 import {CardDeck, CardText, Container, Row} from "reactstrap";
 import {PositionProvider} from "./services/positions/PositionProvider";
 import {GeoLocation} from "./lang/GeoLocation";
 import {WeatherCard} from "./components/cards/WeatherCard";
+import {ReadoutKind, ReadoutProps} from "./lang/Readout";
+import {IWeatherStationReadoutService} from "./services/weather/IWeatherStationReadoutService";
 
 export interface WeatherStationProps {
-    positionProvider: PositionProvider
+    positionProvider: PositionProvider,
+    readoutsFetcher: IWeatherStationReadoutService
 }
 
 export interface WeatherStationState {
-    time: number,
-    position: GeoLocation
+    position: GeoLocation,
+    readouts: ImmutableMap<ReadoutKind, ReadoutProps[]>,
+    readoutsFetcher: IWeatherStationReadoutService
 }
 
 export class WeatherStation extends React.Component<WeatherStationProps, WeatherStationState>{
@@ -21,16 +26,30 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
         super(props);
 
         this.state = {
-            time: now(),
-            position: props.positionProvider.getDefault()
+            position: props.positionProvider.getDefault(),
+            readouts: ImmutableMap(),
+            readoutsFetcher: props.readoutsFetcher
         }
     }
 
     componentDidMount(): void {
         let self = this;
+        let endDate = moment();
+        let startDate = endDate.clone().subtract(24, 'hours');
+
+        // Update current geolocation
         this.props.positionProvider.getPosition().then(position => {
             self.setState({
+                ...this.state,
                 position: position
+            });
+        });
+
+        this.fetchReadouts(startDate, endDate).then(readouts => {
+            // Update state
+            this.setState({
+                ...this.state,
+                readouts: readouts
             });
         });
     }
