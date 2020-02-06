@@ -1,9 +1,13 @@
 import {Moment} from "moment";
-import {List, Record} from "immutable";
+import {List} from "immutable";
 import {ReadoutProps} from "../../lang/Readout";
 
 export abstract class IWeatherStationReadoutService {
-    abstract async getTemperatureReadouts(startDate: Moment, endDate: Moment): Promise<List<Record<ReadoutProps>>>
-    abstract async getHumidityReadouts(startDate: Moment, endDate: Moment): Promise<List<Record<ReadoutProps>>>
-    abstract async getPressureReadouts(startDate: Moment, endDate: Moment): Promise<List<Record<ReadoutProps>>>
+
+    static MOMENT_DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ss';
+
+    abstract async getAllReadouts(startDate: Moment, endDate: Moment): Promise<List<ReadoutProps>>
+    abstract async getTemperatureReadouts(startDate: Moment, endDate: Moment): Promise<List<ReadoutProps>>
+    abstract async getHumidityReadouts(startDate: Moment, endDate: Moment): Promise<List<ReadoutProps>>
+    abstract async getPressureReadouts(startDate: Moment, endDate: Moment): Promise<List<ReadoutProps>>
 }

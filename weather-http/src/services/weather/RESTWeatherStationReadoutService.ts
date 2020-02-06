@@ -1,32 +1,42 @@
 import axios from "axios";
-import {Moment} from "moment";
-import {List, Record} from "immutable";
-import {Readout, ReadoutProps} from "../../lang/Readout";
+import * as moment from "moment";
+import {List} from "immutable";
+import {ReadoutKind, ReadoutProps} from "../../lang/Readout";
 
 import {IWeatherStationReadoutService} from "./IWeatherStationReadoutService";
 
 export class RESTWeatherStationReadoutService implements IWeatherStationReadoutService{
     static BASE_REST_API_URL: string = "/api/readouts";
 
-    async getHumidityReadouts(startDate: Moment, endDate: Moment): Promise<List<Record<ReadoutProps>>> {
+    async getHumidityReadouts(startDate: moment.Moment, endDate: moment.Moment): Promise<List<ReadoutProps>> {
         return this.getReadouts("humidity", startDate, endDate);
     }
 
-    async getPressureReadouts(startDate: Moment, endDate: Moment): Promise<List<Record<ReadoutProps>>> {
+    async getPressureReadouts(startDate: moment.Moment, endDate: moment.Moment): Promise<List<ReadoutProps>> {
         return this.getReadouts("pressure", startDate, endDate);
     }
 
-    async getTemperatureReadouts(startDate: Moment, endDate: Moment): Promise<List<Record<ReadoutProps>>> {
+    async getTemperatureReadouts(startDate: moment.Moment, endDate: moment.Moment): Promise<List<ReadoutProps>> {
         return this.getReadouts("temperature", startDate, endDate);
     }
 
-    private async getReadouts(kind: string, startDate: Moment, endDate: Moment): Promise<List<Record<ReadoutProps>>>{
-        return new Promise<List<Record<ReadoutProps>>>((resolve) => {
+    async getAllReadouts(startDate: moment.Moment, endDate: moment.Moment): Promise<List<ReadoutProps>> {
+        return this.getReadouts("", startDate, endDate);
+    }
+
+    private async getReadouts(kind: string, startDate: moment.Moment, endDate: moment.Moment): Promise<List<ReadoutProps>>{
+        return new Promise<List<ReadoutProps>>((resolve) => {
             axios.get(
-                `${RESTWeatherStationReadoutService.BASE_REST_API_URL}/${kind}?start=${startDate.unix()},end=${endDate.unix()}`
+                `${RESTWeatherStationReadoutService.BASE_REST_API_URL}${kind.length > 0 ? kind : ""}?start=${startDate.format(IWeatherStationReadoutService.MOMENT_DATE_FORMAT)}&end=${endDate.format(IWeatherStationReadoutService.MOMENT_DATE_FORMAT)}`
             ).then(response => {
                 resolve(
-                    List((<Array<ReadoutProps>>response.data).map(readout => Readout(readout)))
+                    List<ReadoutProps>(response.data.map((r: any) => {
+                        return <ReadoutProps>{
+                            kind: ReadoutKind[r.kind as keyof typeof ReadoutKind],
+                            createdAt: moment(r.created_at),
+                            value: r.readout
+                        }
+                    }))
                 );
             })
         });
