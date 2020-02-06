@@ -54,6 +54,23 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
         });
     }
 
+    async fetchReadouts(startDate: moment.Moment, endDate: moment.Moment): Promise<ImmutableMap<ReadoutKind, ReadoutProps[]>>{
+        // Update current readouts
+        let readouts = new Map<ReadoutKind, ReadoutProps[]>();
+        await this.state.readoutsFetcher.getAllReadouts(startDate, endDate)
+            .then(_readouts => {
+                _readouts.forEach(_readout => {
+                    if (!readouts.has(_readout.kind)) {
+                        readouts.set(_readout.kind, []);
+                    }
+
+                    readouts.get(_readout.kind).push(_readout)
+                });
+            });
+
+        return ImmutableMap(readouts);
+    }
+
     render(): any {
         return <div className={"d-flex h-100 flex-column"}>
             <Container fluid={ true } className={"container-fluid d-flex h-85 w-100 flex-column mb-3"}>
@@ -67,18 +84,16 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
                             </CardText>
                         </WeatherCard>
                         <WeatherCard>
-                            <CardText>
-                                <Moment locale={ navigator.languages ? navigator.languages[0] : navigator.language } interval={1} format={"LL"}/>
-                                <br />
-                                <Moment locale={ navigator.languages ? navigator.languages[0] : navigator.language } interval={1} format={"LT"}/>
-                            </CardText>
+                            <CardText className={"text-center text-headline"}>{
+                                this.state.readouts.has(ReadoutKind.TEMPERATURE) ?
+                                    this.state.readouts.get(ReadoutKind.TEMPERATURE)[0].value : "--"
+                            }</CardText>
                         </WeatherCard>
                         <WeatherCard>
-                            <CardText>
-                                <Moment locale={ navigator.languages ? navigator.languages[0] : navigator.language } interval={1} format={"LL"}/>
-                                <br />
-                                <Moment locale={ navigator.languages ? navigator.languages[0] : navigator.language } interval={1} format={"LT"}/>
-                            </CardText>
+                            <CardText className={"text-center text-headline"}>{
+                                this.state.readouts.has(ReadoutKind.PRESSURE) ?
+                                    this.state.readouts.get(ReadoutKind.PRESSURE)[0].value : "--"
+                            }</CardText>
                         </WeatherCard>
                     </CardDeck>
                 </Row>
