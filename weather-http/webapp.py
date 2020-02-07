@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 from datetime import datetime
 
@@ -39,9 +39,12 @@ def home() -> FileResponse:
 # REST Endpoints
 @app.post('/api/readouts')
 @database.transaction()
-async def insert(readout: SensorReadout = Body(None)):
+async def insert(readout: Union[SensorReadout, List[SensorReadout]] = Body(None)):
     query = readouts.insert()
-    await database.execute(query=query, values=readout.dict())
+
+    if isinstance(readout, SensorReadout):
+        readout = [readout]
+    await database.execute_many(query=query, values=[r.dict() for r in readout])
 
 
 @app.get('/api/readouts', response_model=List[SensorReadout])
@@ -61,4 +64,4 @@ async def read_sensor(sensor: str, start: datetime = Query(datetime.now()), end:
 
 
 if __name__ == '__main__':
-    run(app)
+    run(app, host='0.0.0.0')
