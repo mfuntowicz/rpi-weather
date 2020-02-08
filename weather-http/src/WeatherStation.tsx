@@ -8,6 +8,7 @@ import {GeoLocation} from "./lang/GeoLocation";
 import {WeatherCard} from "./components/cards/WeatherCard";
 import {ReadoutKind, ReadoutProps} from "./lang/Readout";
 import {IWeatherStationReadoutService} from "./services/weather/IWeatherStationReadoutService";
+import {WeatherReadoutCard} from "./components/cards/WeatherReadoutCard";
 
 export interface WeatherStationProps {
     positionProvider: PositionProvider,
@@ -82,19 +83,9 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
                                 <br/>
                                 <Moment className={"text-headline-subtitle"} locale={ navigator.languages ? navigator.languages[0] : navigator.language } interval={1} format={"ddd LL"}/>
                             </CardText>
-                        </WeatherCard>
-                        <WeatherCard>
-                            <CardText className={"text-center text-headline"}>{
-                                this.state.readouts.has(ReadoutKind.TEMPERATURE) ?
-                                    this.state.readouts.get(ReadoutKind.TEMPERATURE)[0].value : "--"
-                            }</CardText>
-                        </WeatherCard>
-                        <WeatherCard>
-                            <CardText className={"text-center text-headline"}>{
-                                this.state.readouts.has(ReadoutKind.PRESSURE) ?
-                                    this.state.readouts.get(ReadoutKind.PRESSURE)[0].value : "--"
-                            }</CardText>
-                        </WeatherCard>
+                        </WeatherCard >
+                        <WeatherReadoutCard readout={this.state.readouts.get(ReadoutKind.TEMPERATURE, [undefined])[0]} defaultValue={"--"} unit={"°C"} />
+                        <WeatherReadoutCard readout={this.state.readouts.get(ReadoutKind.PRESSURE, [undefined])[0]} defaultValue={"--"} unit={"hPa"} />
                     </CardDeck>
                 </Row>
                 <CardDeck className={"flex-fill"}>
