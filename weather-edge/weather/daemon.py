@@ -2,8 +2,8 @@ from asyncio import ensure_future, gather, get_event_loop, sleep, wait
 
 from pyhocon import ConfigFactory, ConfigTree
 
-from weather.outputs import Output, ConsoleOutput
-from weather.sensors import Sensor
+from weather.outputs import ConsoleOutput
+from weather.sensors import Sensor, get_sensor_from_config
 from weather.utils import DAEMON_LOGGER
 
 __author__ = 'Morgan Funtowicz'
@@ -15,7 +15,7 @@ DEFAULT_CONFIG_FILE = 'default_config.json'
 
 class WeatherDaemon(object):
 
-    def __init__(self, config_file: str=None):
+    def __init__(self, config_file: str = None):
         if config_file is None:
             config_file = DEFAULT_CONFIG_FILE
 
@@ -71,7 +71,18 @@ class WeatherDaemon(object):
             self._output = builder.from_config(ConfigTree() if 'args' not in config else config['args'])
 
     def _sensors_from_config(self, config: ConfigTree) -> None:
-        return
+        for sensor_name, sensor_args in config.items():
+            self._logger.info("Registering sensor {} with {}".format(sensor_name, sensor_args))
+
+            if "interval" not in sensor_args:
+                raise KeyError("interval parameter is required for sensor {}".format(sensor_name))
+
+            interval = sensor_args.pop("interval")
+            sensor_args = sensor_args.pop("args", {})
+            sensor = get_sensor_from_config(sensor_name, sensor_args)
+
+            # Register sensor
+            self.register(sensor, interval)
 
     async def _scheduled_readout(self, sensor: Sensor, delay: int):
         self._logger.debug('Scheduling readout with delay: %.2f', delay)

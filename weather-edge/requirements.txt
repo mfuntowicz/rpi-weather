@@ -1,9 +1,5 @@
 aiohttp
-typing
 psutil
 pyhocon
-graphene
-ujson
-gql
 requests
 pyopenssl
