@@ -1,11 +1,7 @@
-from asyncio import gather
 from datetime import datetime
-from time import strftime
-
-import ujson
-from aiohttp import ClientSession
 from typing import Dict
 
+from aiohttp import ClientSession
 from pyhocon import ConfigTree
 
 from weather.outputs import Output, OutputBuilder, OUTPUT_REGISTER
@@ -30,7 +26,7 @@ class HttpOutput(Output):
             OUTPUT_LOGGER.warn('Received save request with 0 readouts')
             return
 
-        async with ClientSession(json_serialize=ujson.dumps) as session:
+        async with ClientSession() as session:
             payload = [{
                 "kind": kind.value.upper(),
                 "created_at": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
