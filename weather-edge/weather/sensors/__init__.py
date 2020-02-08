@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, Mapping
 from pyhocon import ConfigTree
 
 __author__ = 'Morgan Funtowicz'
@@ -35,4 +35,20 @@ class SensorFactory(ABC):
         raise NotImplemented()
 
 
-from .bmp280 import BMP280, BMP280_ULTRALOWPOWER, BMP280_STANDARD, BMP280_HIGHRES, BMP280_ULTRAHIGHRES
+_SENSORS_REGISTER: Mapping[str, SensorFactory] = {}
+def register_sensor(name: str, factory: SensorFactory):
+    if name in _SENSORS_REGISTER:
+        raise KeyError("{} is already registered".format(name))
+
+    _SENSORS_REGISTER[name] = factory
+
+
+def get_sensor_from_config(name: str, config: ConfigTree) -> Sensor:
+    if name not in _SENSORS_REGISTER:
+        raise KeyError("{} is not a valid sensor identifier (valid identifiers are: {}"
+                       .format(name, _SENSORS_REGISTER.keys()))
+
+    return _SENSORS_REGISTER[name].build_from_config(config)
+
+from .bmp280 import *
+from .dummy import *

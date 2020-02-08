@@ -1,6 +1,9 @@
-from typing import Dict, Tuple
+from asyncio import sleep
+from typing import Dict, Tuple, Optional
 
-from weather.sensors import Sensor, SensorKind
+from pyhocon import ConfigTree
+
+from weather.sensors import Sensor, SensorKind, SensorFactory, register_sensor
 from weather.utils import SENSORS_LOGGER
 
 # Copyright (c) 2016
@@ -69,6 +72,7 @@ BMP280_REGISTER_TEMPDATA_XLSB = 0xFC
 # Commands
 BMP280_READCMD = 0x3F
 
+FLOAT_NAN = float('nan')
 
 def mode_to_name(mode):
     if 0 <= mode <= BMP280_ULTRAHIGHRES:
@@ -99,7 +103,7 @@ class BMP280(object):
 
         # Load calibration values.
         self._load_calibration()
-        self._tfine = 0
+        self._tfine = FLOAT_NAN
 
     # reading two bytes of data from each address as signed or unsigned, based on the Bosch docs
 
@@ -196,6 +200,8 @@ class BMP280(object):
     def read_temperature(self):
         """Gets the compensated temperature in degrees celsius."""
 
+        self._logger.debug('Reading temperature')
+
         adc_T = self.read_raw_temp()
         tmp_part1 = (((adc_T >> 3) - (self.cal_REGISTER_DIG_T1 << 1)) * self.cal_REGISTER_DIG_T2) >> 11
         tmp_part2 = (((((adc_T >> 4) - self.cal_REGISTER_DIG_T1) *
@@ -205,14 +211,17 @@ class BMP280(object):
         temp = ((tmp_fine * 5 + 128) >> 8) / 100.0
 
         self._tfine = tmp_fine
+        self._logger.debug('Temperature: {}'.format(temp))
         return temp
 
     # applying calibration data to the raw reading
     def read_pressure(self):
         """Gets the compensated pressure in Pascals."""
 
+        self._logger.debug('Reading pressure')
+
         # for pressure calculation we need a temperature, checking if we have one, and reading data if not
-        if self._tfine == 0:
+        if self._tfine == FLOAT_NAN:
             self.read_temperature()
 
         adc_P = self.read_raw_pressure()
@@ -232,6 +241,7 @@ class BMP280(object):
         var2 = (self.cal_REGISTER_DIG_P8 * p) >> 19
 
         p = ((p + var1 + var2) >> 8) + (self.cal_REGISTER_DIG_P7 << 4)
+        self._logger.debug('Pressure: {}'.format(p / 256.))
         return p / 256.0
 
     def read_altitude(self, sealevel_pa=101325.0):
@@ -262,14 +272,31 @@ class BMP280Sensor(Sensor):
         if self._wrapped is None:
             raise ValueError('BMP280 device has been closed')
 
-        from asyncio import ensure_future
-        return ensure_future(lambda: {
+        readouts = {
             SensorKind.TEMPERATURE: round(self._wrapped.read_temperature(), 4),
             SensorKind.PRESSURE: round(self._wrapped.read_pressure(), 4)
-        })
+        }
+
+        await sleep(0.)
+        return readouts
 
     def close(self) -> None:
         self._wrapped = None
 
     def __repr__(self):
         return 'BMP280Sensor(resolution: %s, address: 0x%02x)' % (mode_to_name(self._wrapped.mode), self._wrapped.address)
+
+
+class BMP280SensorFactory(SensorFactory):
+
+    SENSOR_NAME = "bmp280"
+
+    def build_from_config(self, config: ConfigTree) -> Optional[Sensor]:
+        mode = config.get("mode", BMP280_HIGHRES)
+        address = config.get("address", BMP280_I2CADDR)
+
+        return BMP280Sensor(mode, address)
+
+
+# Register the sensor
+register_sensor(BMP280SensorFactory.SENSOR_NAME, BMP280SensorFactory())
