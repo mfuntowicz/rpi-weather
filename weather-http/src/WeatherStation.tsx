@@ -8,6 +8,7 @@ import {GeoLocation} from "./lang/GeoLocation";
 import {WeatherCard} from "./components/cards/WeatherCard";
 import {ReadoutKind, ReadoutProps} from "./lang/Readout";
 import {IWeatherStationReadoutService} from "./services/weather/IWeatherStationReadoutService";
+import {WeatherReadoutChartCard} from "./components/cards/WeatherReadoutChartCard";
 import {WeatherReadoutCard} from "./components/cards/WeatherReadoutCard";
 
 export interface WeatherStationProps {
@@ -88,11 +89,12 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
                         <WeatherReadoutCard readout={this.state.readouts.get(ReadoutKind.PRESSURE, [undefined])[0]} defaultValue={"--"} unit={"hPa"} />
                     </CardDeck>
                 </Row>
-                <CardDeck className={"flex-fill"}>
+                <CardDeck className={"flex-fill m-3"}>
                     <Row className={"mx-0 mb-3 w-100"}>
+                        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.TEMPERATURE)}/>
                     </Row>
                     <Row className={"mx-0 w-100"}>
-
+                        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.PRESSURE)}/>
                     </Row>
                 </CardDeck>
             </Container>
