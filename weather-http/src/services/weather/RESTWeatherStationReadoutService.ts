@@ -33,7 +33,7 @@ export class RESTWeatherStationReadoutService implements IWeatherStationReadoutS
                     List<ReadoutProps>(response.data.map((r: any) => {
                         return <ReadoutProps>{
                             kind: ReadoutKind[r.kind as keyof typeof ReadoutKind],
-                            createdAt: moment(r.created_at),
+                            createdAt: moment.unix(r.created_at),
                             value: r.readout
                         }
                     }))
