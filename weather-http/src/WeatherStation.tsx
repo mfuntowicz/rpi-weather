@@ -2,7 +2,7 @@ import * as React from 'react';
 import Moment from "react-moment";
 import * as moment from 'moment';
 import {Map as ImmutableMap} from "immutable";
-import {CardDeck, CardText, Container, Row} from "reactstrap";
+import {CardDeck, CardText, Col, Container, Row} from "reactstrap";
 import {PositionProvider} from "./services/positions/PositionProvider";
 import {GeoLocation} from "./lang/GeoLocation";
 import {WeatherCard} from "./components/cards/WeatherCard";
@@ -23,6 +23,7 @@ export interface WeatherStationState {
 }
 
 export class WeatherStation extends React.Component<WeatherStationProps, WeatherStationState>{
+    private ws: WebSocket;
 
     constructor(props: WeatherStationProps) {
         super(props);
@@ -31,7 +32,9 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
             position: props.positionProvider.getDefault(),
             readouts: ImmutableMap(),
             readoutsFetcher: props.readoutsFetcher
-        }
+        };
+
+        this.ws = null;
     }
 
     componentDidMount(): void {
@@ -54,6 +57,11 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
                 readouts: readouts
             });
         });
+
+        this.ws = new WebSocket(`ws://${window.location.host}/ws/readouts`);
+        this.ws.onopen = e => {console.log(`Open: ${e}`); this.ws.send("Hello world !"); };
+        this.ws.onmessage = (e: MessageEvent) => console.log(`Message: ${e.data}`);
+        this.ws.onclose = e => console.log(`Close: ${e}`);
     }
 
     async fetchReadouts(startDate: moment.Moment, endDate: moment.Moment): Promise<ImmutableMap<ReadoutKind, ReadoutProps[]>>{
@@ -76,7 +84,7 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
     render(): any {
         return <div className={"d-flex h-100 flex-column"}>
             <Container fluid={ true } className={"container-fluid d-flex h-85 w-100 flex-column mb-3"}>
-                <Row>
+                <Row className={"weather-station-header my-2"}>
                     <CardDeck className={"mx-1 flex-fill"}>
                         <WeatherCard>
                             <CardText className={"text-center"}>
@@ -89,14 +97,34 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
                         <WeatherReadoutCard readout={this.state.readouts.get(ReadoutKind.PRESSURE, [undefined])[0]} defaultValue={"--"} unit={"hPa"} />
                     </CardDeck>
                 </Row>
-                <CardDeck className={"flex-fill m-3"}>
-                    <Row className={"mx-0 mb-3 w-100"}>
-                        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.TEMPERATURE)}/>
-                    </Row>
-                    <Row className={"mx-0 w-100"}>
-                        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.PRESSURE)}/>
-                    </Row>
-                </CardDeck>
+                {/*<Row className={"row-cols-1 row-cols-md-2 d-flex h-85"}>*/}
+                {/*    <Col className={"mb-4"}>*/}
+                {/*        <Card>*/}
+                    <Col cols={6}>
+                        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.TEMPERATURE)} />
+                    </Col>
+                    <Col cols={6}>
+                        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.PRESSURE)} />
+                    </Col>
+
+                        {/*</Card>*/}
+                    {/*</Col>*/}
+                    {/*<Col className={"mb-4"}>*/}
+                    {/*    <Card>*/}
+                    {/*        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.PRESSURE)} />*/}
+                    {/*    </Card>*/}
+                    {/*</Col>*/}
+                    {/*<Col className={"mb-4"}>*/}
+                    {/*    <Card>*/}
+                    {/*        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.TEMPERATURE)} />*/}
+                    {/*    </Card>*/}
+                    {/*</Col>*/}
+                    {/*<Col className={"mb-4"}>*/}
+                    {/*    <Card>*/}
+                    {/*        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.PRESSURE)} />*/}
+                    {/*    </Card>*/}
+                    {/*</Col>*/}
+                {/*</Row>*/}
             </Container>
         </div>
     }
