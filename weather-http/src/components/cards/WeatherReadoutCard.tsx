@@ -1,22 +1,30 @@
 import * as React from "react";
 import {WeatherCard} from "./WeatherCard";
 import {CardText} from "reactstrap";
-import {ReadoutProps} from "../../lang/Readout";
+import {ReadoutKind, ReadoutProps} from "../../lang/Readout";
+import {List, Map} from "immutable";
 
 export interface WeatherReadoutValueCardProps{
-    readout: Readonly<ReadoutProps>,
+    readout: Map<ReadoutKind, List<ReadoutProps>>,
+    kind: ReadoutKind,
     defaultValue: string,
     unit: string
 }
 
 export class WeatherReadoutCard extends React.Component<WeatherReadoutValueCardProps, {}>{
     render(){
+        let value = this.props.defaultValue;
+        if (this.props.readout.has(this.props.kind) &&  this.props.readout.get(this.props.kind, List()).size > 0){
+            let readouts = this.props.readout.get(this.props.kind);
+            value = readouts.get(readouts.size - 1).value.toFixed(2);
+        }
+
         return (
             <WeatherCard>
                 <CardText className={"text-center"}>
                     <span className={"text-headline"}>
                     {
-                        this.props.readout != undefined ? this.props.readout.value : this.props.defaultValue
+                        value
                     }
                     </span>
                     <span>

@@ -29,7 +29,7 @@ class HttpOutput(Output):
         async with ClientSession() as session:
             payload = [{
                 "kind": kind.value.upper(),
-                "created_at": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+                "created_at": datetime.now().astimezone().isoformat(timespec="seconds"),
                 "readout": value
             } for kind, value in readouts.items()]
 

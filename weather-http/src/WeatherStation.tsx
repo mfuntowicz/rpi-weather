@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Moment from "react-moment";
 import * as moment from 'moment';
-import {Map as ImmutableMap} from "immutable";
+import {List, Map as ImmutableMap} from "immutable";
 import {CardDeck, CardText, Col, Container, Row} from "reactstrap";
 import {PositionProvider} from "./services/positions/PositionProvider";
 import {GeoLocation} from "./lang/GeoLocation";
@@ -18,7 +18,7 @@ export interface WeatherStationProps {
 
 export interface WeatherStationState {
     position: GeoLocation,
-    readouts: ImmutableMap<ReadoutKind, ReadoutProps[]>,
+    readouts: ImmutableMap<ReadoutKind, List<ReadoutProps>>,
     readoutsFetcher: IWeatherStationReadoutService
 }
 
@@ -27,6 +27,9 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
 
     constructor(props: WeatherStationProps) {
         super(props);
+
+        // let _readouts_init = [ReadoutKind.PRESSURE, ReadoutKind.TEMPERATURE, ReadoutKind.HUMIDITY]
+        //     .map<[ReadoutKind, ReadoutProps[]]>(kind => [kind, []]);
 
         this.state = {
             position: props.positionProvider.getDefault(),
@@ -50,37 +53,58 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
             });
         });
 
+        // Fetch last 24h readouts
         this.fetchReadouts(startDate, endDate).then(readouts => {
             // Update state
             this.setState({
                 ...this.state,
                 readouts: readouts
             });
+        }).then(() => {
+            this.ws = new WebSocket(`ws://${window.location.host}/ws/readouts`);
+            this.ws.onopen = this.onWebSocketOpened.bind(this);
+            this.ws.onmessage = this.onWebSocketMessage.bind(this);
+            this.ws.onclose = this.onWebSocketClosed.bind(this);
         });
-
-        this.ws = new WebSocket(`ws://${window.location.host}/ws/readouts`);
-        this.ws.onopen = e => {console.log(`Open: ${e}`); this.ws.send("Hello world !"); };
-        this.ws.onmessage = (e: MessageEvent) => console.log(`Message: ${e.data}`);
-        this.ws.onclose = e => console.log(`Close: ${e}`);
     }
 
-    async fetchReadouts(startDate: moment.Moment, endDate: moment.Moment): Promise<ImmutableMap<ReadoutKind, ReadoutProps[]>>{
+    async fetchReadouts(startDate: moment.Moment, endDate: moment.Moment): Promise<ImmutableMap<ReadoutKind, List<ReadoutProps>>>{
         // Update current readouts
-        let readouts = new Map<ReadoutKind, ReadoutProps[]>();
+        let readouts = ImmutableMap<ReadoutKind, List<ReadoutProps>>();
         await this.state.readoutsFetcher.getAllReadouts(startDate, endDate)
             .then(_readouts => {
                 _readouts.forEach(_readout => {
-                    if (!readouts.has(_readout.kind)) {
-                        readouts.set(_readout.kind, []);
-                    }
-
-                    readouts.get(_readout.kind).push(_readout)
+                    readouts = readouts.update(_readout.kind, (l = List()) => l.push(_readout))
                 });
             });
-
-        return ImmutableMap(readouts);
+        return readouts;
     }
 
+    /// WebSocket events
+    onWebSocketOpened(_: Event){
+        console.log('WebSocket Opened')
+    }
+
+    onWebSocketClosed(e: CloseEvent){
+        console.log(`WebSocket Closed: ${e}`)
+    }
+
+    onWebSocketMessage(e: MessageEvent){
+        let data = JSON.parse(e.data);
+        let readout: ReadoutProps = {
+            kind: data.kind,
+            createdAt: moment.utc(data.created_at),
+            value: data.readout
+        };
+
+        // this.state.readouts.get(readout.kind).push(readout);
+        this.setState(prevState => ({
+                readouts: prevState.readouts.update(readout.kind, (entry = List()) => entry.push(readout))
+            })
+        );
+    }
+
+    /// Rendering
     render(): any {
         return <div className={"d-flex h-100 flex-column"}>
             <Container fluid={ true } className={"container-fluid d-flex h-85 w-100 flex-column mb-3"}>
@@ -93,38 +117,26 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
                                 <Moment className={"text-headline-subtitle"} locale={ navigator.languages ? navigator.languages[0] : navigator.language } interval={1} format={"ddd LL"}/>
                             </CardText>
                         </WeatherCard >
-                        <WeatherReadoutCard readout={this.state.readouts.get(ReadoutKind.TEMPERATURE, [undefined])[0]} defaultValue={"--"} unit={"°C"} />
-                        <WeatherReadoutCard readout={this.state.readouts.get(ReadoutKind.PRESSURE, [undefined])[0]} defaultValue={"--"} unit={"hPa"} />
+                        <WeatherReadoutCard readout={ this.state.readouts } kind={ReadoutKind.TEMPERATURE} defaultValue={"--"} unit={"°C"} />
+                        <WeatherReadoutCard readout={ this.state.readouts } kind={ReadoutKind.PRESSURE} defaultValue={"--"} unit={"hPa"} />
                     </CardDeck>
                 </Row>
-                {/*<Row className={"row-cols-1 row-cols-md-2 d-flex h-85"}>*/}
-                {/*    <Col className={"mb-4"}>*/}
-                {/*        <Card>*/}
-                    <Col cols={6}>
+                <Row className="m-3 d-flex justify-content-start flex-grow-1">
+                    <Col xs={6} className="px-1">
                         <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.TEMPERATURE)} />
                     </Col>
-                    <Col cols={6}>
+                    <Col xs={6} className="px-1">
                         <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.PRESSURE)} />
                     </Col>
-
-                        {/*</Card>*/}
-                    {/*</Col>*/}
-                    {/*<Col className={"mb-4"}>*/}
-                    {/*    <Card>*/}
-                    {/*        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.PRESSURE)} />*/}
-                    {/*    </Card>*/}
-                    {/*</Col>*/}
-                    {/*<Col className={"mb-4"}>*/}
-                    {/*    <Card>*/}
-                    {/*        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.TEMPERATURE)} />*/}
-                    {/*    </Card>*/}
-                    {/*</Col>*/}
-                    {/*<Col className={"mb-4"}>*/}
-                    {/*    <Card>*/}
-                    {/*        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.PRESSURE)} />*/}
-                    {/*    </Card>*/}
-                    {/*</Col>*/}
-                {/*</Row>*/}
+                </Row>
+                <Row className="m-3 d-flex justify-content-start flex-grow-1">
+                    <Col xs={6} className="px-1">
+                        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.TEMPERATURE)} />
+                    </Col>
+                    <Col xs={6} className="px-1">
+                        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.PRESSURE)} />
+                    </Col>
+                </Row>
             </Container>
         </div>
     }

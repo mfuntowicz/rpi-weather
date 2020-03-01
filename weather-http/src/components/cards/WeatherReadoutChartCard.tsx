@@ -1,9 +1,12 @@
 import * as React from "react";
-import {ReadoutProps} from "../../lang/Readout";
 import { ResponsiveLine } from '@nivo/line'
+import {List} from "immutable";
+import {ReadoutProps} from "../../lang/Readout";
 
 interface WeatherReadoutChartCardProps {
-    readouts: ReadoutProps[]
+    readouts: List<ReadoutProps>
+    legendY?: string
+    legendX?: string
 }
 
 interface WeatherReadoutChartCardState {
@@ -25,14 +28,13 @@ export class WeatherReadoutChartCard extends React.Component<WeatherReadoutChart
             return {
                 readouts: [{
                     id: "Serie",
-                    data: props.readouts.flatMap(
-                        (readout) => {
+                    data: props.readouts.map(value => {
                             return {
-                                x: readout.createdAt.toISOString(), //format("Y-MM-DD HH:mm:ss")
-                                y: readout.value
+                                x: value.createdAt.toISOString(), //format("Y-MM-DD HH:mm:ss")
+                                y: value.value
                             }
                         }
-                    )
+                    ).toArray()
                 }]
             }
         }
@@ -42,7 +44,7 @@ export class WeatherReadoutChartCard extends React.Component<WeatherReadoutChart
 
     render(){
         if(this.state.readouts === undefined){
-            return <span></span>
+            return <span />
         }else {
             return (
                 <ResponsiveLine
@@ -50,21 +52,21 @@ export class WeatherReadoutChartCard extends React.Component<WeatherReadoutChart
                     xScale={{
                         type: 'time',
                         format: '%Y-%m-%dT%H:%M:%S.%LZ',
-                        precision: 'second',
+                        precision: 'minute',
                     }}
-                    xFormat="time:%Y-%m-%d %H:%M:%S"
+                    xFormat="time:%H:%M:%S"
                     yScale={{
                         type: 'linear',
                         stacked: false,
                     }}
                     axisLeft={{
-                        legend: 'linear scale',
+                        legend: this.props.legendY || "",
                         legendOffset: 12,
                     }}
                     axisBottom={{
                         format: '%H %M',
-                        tickValues: 'every 2 hours',
-                        legend: 'time scale',
+                        tickValues: 'every 12 hours',
+                        legend: this.props.legendX || "",
                         legendOffset: -12,
                     }}
 
@@ -77,6 +79,8 @@ export class WeatherReadoutChartCard extends React.Component<WeatherReadoutChart
                     //     modifiers: [['darker', 0.3]],
                     // }}
                     useMesh={true}
+                    enableGridX={true}
+                    enableGridY={true}
                     enableSlices={false}
                     enableArea={true}
                     areaOpacity={0.3}

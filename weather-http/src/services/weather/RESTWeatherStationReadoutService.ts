@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as moment from "moment";
 import {List} from "immutable";
-import {ReadoutKind, ReadoutProps} from "../../lang/Readout";
+import {ReadoutProps} from "../../lang/Readout";
 
 import {IWeatherStationReadoutService} from "./IWeatherStationReadoutService";
 
@@ -32,7 +32,7 @@ export class RESTWeatherStationReadoutService implements IWeatherStationReadoutS
                 resolve(
                     List<ReadoutProps>(response.data.map((r: any) => {
                         return <ReadoutProps>{
-                            kind: ReadoutKind[r.kind as keyof typeof ReadoutKind],
+                            kind: r.kind,
                             createdAt: moment.unix(r.created_at),
                             value: r.readout
                         }

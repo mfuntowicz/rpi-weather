@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from pydantic import BaseModel
 
@@ -15,6 +15,6 @@ class SensorReadout(BaseModel):
     def to_json(self) -> dict:
         return {
             "kind": self.kind,
-            "created_at": self.created_at.isoformat(),
+            "created_at": self.created_at.astimezone().isoformat(timespec="milliseconds"),
             "readout": self.readout
         }

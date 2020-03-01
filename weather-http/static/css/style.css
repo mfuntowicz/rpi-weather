@@ -10,13 +10,21 @@ html, body {
     height: 100%;
 }
 
+.flex-fill {
+    flex: 1 !important;
+}
+
+.weather-station-header {
+    background: #f8aa4b !important;
+}
+
 .text-headline {
-    font-size: 30px !important;
+    font-size: 24px !important;
     font-weight: 700 !important;
 }
 
 .text-headline-subtitle {
-    font-size: 20px !important;
+    font-size: 18px !important;
     font-weight: 700 !important;
 }
 
@@ -141,3 +149,5 @@ html, body {
 @keyframes rotate {
     100% {transform: rotate(360deg);}
 }
+
+

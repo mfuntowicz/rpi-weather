@@ -2,8 +2,8 @@ from asyncio import gather
 from datetime import datetime
 from typing import Dict
 
-from gql import Client, gql
-from gql.transport.requests import RequestsHTTPTransport
+# from gql import Client, gql
+# from gql.transport.requests import RequestsHTTPTransport
 from pyhocon import ConfigTree
 
 from weather.outputs import Output, OutputBuilder, OUTPUT_REGISTER
