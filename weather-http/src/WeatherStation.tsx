@@ -123,18 +123,18 @@ export class WeatherStation extends React.Component<WeatherStationProps, Weather
                 </Row>
                 <Row className="m-3 d-flex justify-content-start flex-grow-1">
                     <Col xs={6} className="px-1">
-                        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.TEMPERATURE)} />
+                        <WeatherReadoutChartCard name={ReadoutKind.TEMPERATURE} readouts={this.state.readouts.get(ReadoutKind.TEMPERATURE)} />
                     </Col>
                     <Col xs={6} className="px-1">
-                        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.PRESSURE)} />
+                        <WeatherReadoutChartCard name={ReadoutKind.PRESSURE} readouts={this.state.readouts.get(ReadoutKind.PRESSURE)} />
                     </Col>
                 </Row>
                 <Row className="m-3 d-flex justify-content-start flex-grow-1">
                     <Col xs={6} className="px-1">
-                        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.TEMPERATURE)} />
+                        <WeatherReadoutChartCard name={ReadoutKind.TEMPERATURE} readouts={this.state.readouts.get(ReadoutKind.TEMPERATURE)} />
                     </Col>
                     <Col xs={6} className="px-1">
-                        <WeatherReadoutChartCard readouts={this.state.readouts.get(ReadoutKind.PRESSURE)} />
+                        <WeatherReadoutChartCard  name={ReadoutKind.PRESSURE} readouts={this.state.readouts.get(ReadoutKind.PRESSURE)} />
                     </Col>
                 </Row>
             </Container>
