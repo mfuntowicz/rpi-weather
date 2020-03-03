@@ -5,7 +5,7 @@ from sqlalchemy import create_engine, Column, DateTime, MetaData, Table, String,
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-DATABASE_URL = 'sqlite:///readouts.sqlite3'
+DATABASE_URL = 'sqlite:///storages/readouts.sqlite3'
 
 database = databases.Database(DATABASE_URL)
 metadata = MetaData()
