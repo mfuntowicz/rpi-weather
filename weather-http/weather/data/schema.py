@@ -15,6 +15,6 @@ class SensorReadout(BaseModel):
     def to_json(self) -> dict:
         return {
             "kind": self.kind,
-            "created_at": self.created_at.astimezone().isoformat(timespec="milliseconds"),
+            "created_at": self.created_at.strftime('%Y-%m-%dT%H:%M:%S'),
             "readout": self.readout
         }
